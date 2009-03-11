@@ -1,0 +1,54 @@
+/********************************
+ * FUNCTION:	host_info
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.12
+ * DESCRIPTION:	Use this function to get browser info.  It only loads the info the first time; subsequent calls simply
+ *              return the previously-generated object.
+ * PARAMETERS:	none
+ * RETURNS:	    object: major_ver, minor_ver, name properties
+ */
+goroam.browser.host_info = function() {
+  if (!goroam.browser.__host_info) goroam.browser.load_host_info();
+  return goroam.browser.__host_info;
+}
+
+/********************************
+ * FUNCTION:	load_host_info
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.12
+ * DESCRIPTION:	This function loads browser information about the viewer's browser.
+ * PARAMETERS:	none
+ * RETURNS:	    none
+ */
+goroam.browser.load_host_info = function() {
+  goroam.browser.__host_info = {major_ver: 0, minor_ver: 0, name: ''};
+  var userAgent=window.navigator.userAgent.toLowerCase();
+  var index;
+  var version=null;
+  if((index=userAgent.indexOf('msie'))>=0) {
+    goroam.browser.__host_info.name = goroam.enm.browsers.ie;
+    version = userAgent.substr(index+5);
+  }
+  else if((index=userAgent.indexOf('firefox'))>=0) {
+    goroam.browser.__host_info.name = goroam.enm.browsers.mozilla;
+    version=userAgent.substr(index+8);
+  }
+  else if((index=userAgent.indexOf('safari'))>=0){
+    goroam.browser.__host_info.name = goroam.enm.browsers.safari;
+    version=userAgent.substr(index+7);
+  }
+  else if((index=userAgent.indexOf('gecko'))>=0){
+    goroam.browser.__host_info.name = goroam.enm.browsers.mozilla;
+    version=window.navigator.appVersion;
+  }
+  else{
+    goroam.browser.__host_info.name = goroam.enm.browsers.other;
+  }
+  if(version){
+    var verFloat=parseFloat(version);
+    goroam.browser.__host_info.major_ver = parseInt(verFloat);
+    if((index=version.indexOf('.'))>=0) {
+      goroam.browser.__host_info.minor_ver = parseInt(version.substr(index+1));
+    }
+  }
+}

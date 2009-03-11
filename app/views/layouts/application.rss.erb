@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+  <channel>
+    <title><%= Constant::get(:app_name) %> : <%= @page[:title] %> (RSS 2.0)</title>
+    <link><%= request.url.chomp('.rss') %></link>
+    <description><%= @page[:description] %></description>
+    <language>en-us</language>
+    <pubDate><%= yield :last_build %></pubDate>
+    <lastBuildDate><%= yield :last_build %></lastBuildDate>
+    <managingEditor>support@goro.am</managingEditor>
+    <webMaster>webmaster@goro.am</webMaster>
+    <image>
+      <url>http://goro.am/images/logo.gif</url>
+      <title><%= Constant::get(:app_name) %></title>
+      <link>http://geo.goro.am</link>
+      <height>100</height>
+      <width>100</width>
+    </image>
+    <category>geotagging</category>
+    <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+    <%= yield %>
+  </channel>
+</rss>

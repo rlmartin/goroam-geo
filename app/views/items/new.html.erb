@@ -1,0 +1,19 @@
+<h1>Items#new</h1>
+<p>Find me in app/views/items/new.html.erb</p>
+<%= @geo_point.lat %>, <%= @geo_point.lng %><br />
+<% form_for :item, :url => create_item_path(@geo_point.lat, @geo_point.lng) do |f| %>
+<div class='input_container'>
+   <div class='input_prompt'>Title:</div>
+   <div class='input_field'><%= f.text_field :title %></div>
+</div>
+<div class='input_container'>
+   <div class='input_prompt'>Value:</div>
+   <div class='input_field'><%= f.text_field :value %></div>
+</div>
+<div class='input_container'>
+   <div class='input_prompt'>Type:</div>
+   <div class='input_field'><%= f.select :data_type_id, DataType.find(:all, :order => "CASE WHEN name = 'Unknown' THEN 1 ELSE 0 END DESC, name").collect { |d| [d.name, d.id] } %></div>
+</div>
+<div class='input_submit'><%= f.submit %></div>
+<% end %>
+

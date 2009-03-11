@@ -1,0 +1,66 @@
+<%
+  @page[:title] = Constant::get(:title_search_page)
+  @page[:keywords] = Constant::get(:keywords_search_page)
+  @page[:description] = Constant::get(:description_search_page)
+  @page[:page_class] = "search_page"
+%>
+<h1><%= Constant::get(:search_page_header) %></h1>
+<h2><%= Constant::get(:search_page_description) %></h2>
+<form onsubmit='goroam.google.maps.get_map().goto_location(document.getElementById("location").value); return false;' id='search_form'>
+  <input type='text' id='location' /><input type='submit' value='<%= Constant::get(:search_submit_button_text) %>' class='button' />
+</form>
+<ul class='gr_item_list'>
+  <li><div id='found_addr'></div></li>
+  <li><div class='input_prompt'><%= Constant::get(:latitude_text) %>:</div><div class='input_field'><input type='text' id='lat' onfocus='this.select();' onclick='this.select();' /></div></li>
+  <li><div class='input_prompt'><%= Constant::get(:longitude_text) %>:</div><div class='input_field'><input type='text' id='lng' onfocus='this.select();' onclick='this.select();' /></div></li>
+  <li><div class='input_prompt'><%= Constant::get(:code_text) %>:</div><div class='input_field'><textarea id='code' onfocus='this.select();' onclick='this.select();'></textarea></li>
+<!--  <li><a href='' style='display:none;' id='goto_link'><%= Constant::get(:search_page_goto_link_text) %></a></li>
+  <li><%= render :partial => 'geo_points/add_new_item' %></li>
+  <li><%= render :partial => 'geo_points/change_radius' %></li>-->
+  <li class='additional_item_header'><%= Constant::get(:generate_lat_lng_html_prompt) %></li>
+  <li class='additional_item'>
+    <form id='generate_form' onsubmit='generate_html(); return false;'>
+      <div class='input_prompt'><%= Constant::get(:item_text) %>:</div><div class='input_field'><textarea id='item' ></textarea>
+      <div class='input_prompt'><%= Constant::get(:title_text) %>:</div><div class='input_field'><input type='text' id='title' /></div>
+      <div class='input_field'>
+        <%= Constant::get(:search_page_type_prompt) %>: <select id='code_template'>
+          <option value='<a href="{item}" lat="{lat}" lng="{lng}">{title}</a>'><%= Constant::get(:url_text) %></option>
+          <option value='<img href="{item}" lat="{lat}" lng="{lng}" alt="{title}" />'><%= Constant::get(:image_text) %></option>
+          <option value='<p lat="{lat}" lng="{lng}" title="{title}">{item}</p>' selected='selected'><%= Constant::get(:general_text_text) %></option>
+        </select>
+        <input type='submit' value='<%= Constant::get(:generate_submit_button_text) %>' class='button' />
+      </div>
+    </form>
+  </li>
+  <li class='additional_item'><div class='input_prompt'><%= Constant::get(:code_text) %>:</div><div class='input_field'><textarea id='generated_code' rows='4' onfocus='this.select();' onclick='this.select();'></textarea></li>
+</ul>
+<div id='map'></div>
+<script>
+google.setOnLoadCallback(function() {
+  var objMap = goroam.google.maps.get_map();
+  objMap.create_active_marker(undefined, true);
+  goroam.event.bind(objMap, 'location_found', document.getElementById('lat'), function(objLatLng) { this.value = objLatLng.lat(); });
+  goroam.event.bind(objMap, 'location_found', document.getElementById('lng'), function(objLatLng) { this.value = objLatLng.lng(); });
+  goroam.event.bind(objMap, 'location_found', document.getElementById('code'), function(objLatLng) { this.value = 'lat="' + objLatLng.lat() + ' lng="' + objLatLng.lng() + '"'; });
+  //goroam.event.bind(objMap, 'location_found', document.getElementById('goto_link'), function(objLatLng) { this.href = '<%= Constant::get(:root_url) %>/' + objLatLng.lat() + '/' + objLatLng.lng(); this.style.display = 'inline'; });
+  //goroam.event.bind(objMap, 'location_found', document.getElementById('add_tag_link'), function(objLatLng) { this.href = '<%= Constant::get(:root_url) %>/' + objLatLng.lat() + '/' + objLatLng.lng() + '/new'; this.style.display = 'inline'; });
+  //goroam.event.bind(objMap, 'location_found', document.getElementById('change_radius_form'), function(objLatLng) { this.action = '<%= Constant::get(:root_url) %>/' + objLatLng.lat() + '/' + objLatLng.lng(); });
+  goroam.event.bind(objMap, 'location_found', document.getElementById('found_addr'), function(objLatLng, strAddress) { this.innerHTML = (strAddress || ''); });
+  goroam.event.bind(objMap, 'location_found', document.getElementById('generated_code'), generate_html);
+  goroam.event.trigger(objMap, 'location_found', objMap.active_marker.getLatLng());
+});
+
+function generate_html() {
+  var elCode = document.getElementById('generated_code');
+  var elLat = document.getElementById('lat');
+  var elLng = document.getElementById('lng');
+  var elItem = document.getElementById('item');
+  var elTitle = document.getElementById('title');
+  var elTemplate = document.getElementById('code_template');
+  var strTemplate = '';
+  if (elTemplate) strTemplate = goroam.dhtml.get_select_value(elTemplate);
+  if (elCode && elLat && elLng && elItem && elTitle) {
+    elCode.value = strTemplate.replace('{lat}', elLat.value).replace('{lng}', elLng.value).replace('{item}', elItem.value).replace('{title}', elTitle.value);
+  }
+}
+</script>

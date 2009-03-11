@@ -1,0 +1,23 @@
+BODY * {
+	position: relative;
+}
+.gr_focus_overlay { border:2px dashed #f60; display: none; }
+.gr_focus_overlay_stage1 { display: block; height:40px; width:40px; }
+.gr_focus_overlay_stage2 { display: block; height:20px; width:20px; }
+.gr_focus_overlay_stage3 { display: block; height:10px; width:10px; }
+.gr_highlight, A.gr_highlight, A:link.gr_highlight, A:hover.gr_highlight, A:visited.gr_highlight { color: #f60; }
+img.gr_highlight, ul.gr_item_list li img.gr_highlight { border: 1px solid #f60; }
+.gr_map_prompt { background-image: url(/images/icons/map_go.gif); filter: alpha(opacity = 60); font-size: 0px; height: 16px; line-height: 0px; opacity: 0.6; position: absolute; width: 16px; z-index: 10; }
+.gr_map_prompt_hover { background-image: url(/images/icons/map_go_big.gif); filter: alpha(opacity = 100); font-size: 0px; height: 25px; line-height: 0px; opacity: 1; width: 25px; }
+.gr_map_prompt_ne { top: 0px; right: 0px; }
+.gr_map_prompt_nw { top: 0px; left: 0px; }
+.gr_map_prompt_se { bottom: 0px; right: 0px; }
+.gr_map_prompt_sw { bottom: 0px; left: 0px; }
+.gr_map_prompt_hover_element { background-image: url(/images/icons/map_go.gif); filter: alpha(opacity = 100); font-size: 0px; height: 16px; line-height: 0px; opacity: 1; width: 16px; }
+.gr_popup_background { background-image: url(/images/gray.gif); filter: alpha(opacity = 70); height: 100%; left: 0px; position: absolute; opacity: 0.7; top: 0px; width: 100%; z-index: 3000; }
+.gr_popup_div { margin: 0 auto; overflow: auto; z-index: 3001; }
+.gr_popup_close_button { background-image: url(/images/close_button_small.gif); border-bottom: 1px solid #254; border-left: 1px solid #254; cursor: pointer; font-size: 0px; height: 7px; line-height: 0px; position: absolute; right: 0px; top: 0px; width: 7px; z-index: 3002; }
+.gr_popup_text { height: 100%; width: 100%; z-index: 3002; }
+.gr_msg_box { background-color: white; border: 1px solid #254;  padding: 10px; width: 300px; }
+.gr_popup_map { border: 1px solid #254; height: 400px; width: 500px; }
+#gr_popup_map { height: 100%; width: 100%; }

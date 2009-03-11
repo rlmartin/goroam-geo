@@ -1,0 +1,7 @@
+{"geo_point": {<%= render(:partial => 'items/lat_lng', :locals => { :geo_point => @geo_point }).chomp %><% if defined? @within %>, "within": <%= @within %>, "units": "<%= @units %>"<% end %>, "items": [<% if defined? @items_geo_point %>
+  <%= render(:partial => 'items/item', :collection => @items, :locals => { :geo_point => @items_geo_point }).chomp %>
+  <% else %>
+  <%= render(:partial => 'items/item', :collection => @items, :locals => { :dist_geo_point => @geo_point, :units => @units }).chomp %>
+  <% end %>]}
+}
+

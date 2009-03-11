@@ -1,0 +1,25 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+newhaven:
+  lat: 41.30689
+  lng: -72.928784
+
+desbrosses:
+  lat: 40.7233441
+  lng: -74.0086905
+
+cb:
+  lat: 38.87018
+  lng: -106.985819
+
+tudorcity:
+  lat: 40.758205
+  lng: -73.990626
+
+oldebirch:
+  lat: 43.712393
+  lng: -70.283836
+
+ec:
+  lat: 40.887121
+  lng: -73.9503075

@@ -1,0 +1,14 @@
+<%
+case item.data_type_id
+  when 3
+    partial_type = 'items/link'
+  when 4
+    partial_type = 'items/img'
+  when 2
+    partial_type = 'items/text'
+  else
+    partial_type = ''
+end
+unless partial_type == ''
+%><%= render(:partial => partial_type, :locals => { :geo_point => defined?(geo_point)? geo_point : nil, :item => item }).chomp %><% end -%>
+

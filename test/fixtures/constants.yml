@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  value: MyString
+  server_type: MyString
+  lang: MyString
+  cast_as: MyString
+  active: false
+
+two:
+  name: MyString
+  value: MyString
+  server_type: MyString
+  lang: MyString
+  cast_as: MyString
+  active: false

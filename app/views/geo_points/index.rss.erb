@@ -1,0 +1,15 @@
+<% if defined? @items_geo_point %>
+<%= render(:partial => 'items/item', :collection => @items, :locals => { :geo_point => @items_geo_point }).chomp %>
+<% else %>
+<%= render(:partial => 'items/item', :collection => @items, :locals => { :dist_geo_point => @geo_point, :units => @units }).chomp %>
+<% end %>
+<% content_for :last_build do
+    if @items.empty?
+      last_build_date = Time.now
+    else
+      last_build_date = Time.parse('1/1/2009')
+      @items.each do | item |
+        if last_build_date < item.created_at: last_build_date = item.created_at end
+      end
+    end
+%><%= last_build_date.strftime('%a, %d %b %Y %H:%M:%S %Z') %><% end %>

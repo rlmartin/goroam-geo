@@ -1,0 +1,2 @@
+<% item_html = render(:partial => 'items/item', :locals => { :geo_point => defined?(geo_point)? geo_point : nil, :item => list_item }).chomp
+item_html.strip! %><% unless item_html.strip == "" %><li><%= item_html %></li><% end %>

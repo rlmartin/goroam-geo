@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+unknown:
+  name: Unknown
+
+raw_text:
+  name: Raw Text
+
+url:
+  name: URL
+
+image:
+  name: Image

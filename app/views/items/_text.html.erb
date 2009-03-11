@@ -1,0 +1,1 @@
+<div title='<%= item.title %>' <%= render(:partial => 'items/lat_lng', :locals => { :geo_point => defined?(geo_point)? geo_point : nil, :item => item }).chomp %>><%= item.value %></div>

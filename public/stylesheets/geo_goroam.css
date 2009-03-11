@@ -1,0 +1,336 @@
+/* Main clear-formatting section */
+BODY * {
+	position: relative;
+}
+BODY {
+  background-color: #cfb;
+	font-family: Trebuchet MS, Arial, sans serif, sans;
+	font-size: 100%;
+	margin: 0px;
+  padding: 0px;
+}
+A {
+	color: #254;
+	cursor: pointer;
+	font-weight: bold;
+}
+A:link, A:visited {
+	color: #254;
+	font-weight: bold;
+}
+A IMG {
+	border-width: 0;
+}
+.button,
+BUTTON
+{
+	color: #254;
+	font-size: 1.15em;
+}
+FORM {
+	margin: 0px;
+}
+h1, h2, h3, h4, h5 {
+  margin: 0px;
+}
+INPUT, TEXTAREA
+{
+	color: #254;
+	font-family: Trebuchet MS, Arial, sans serif, sans;
+	font-weight: bold;
+}
+.text_box
+{
+	font-size: 1.5em;
+}
+.page {
+	margin: 0 auto;
+}
+
+/* General formatting */
+.dark_color,
+A.dark_color,
+A:link.dark_color,
+A:visited.dark_color,
+A:hover.dark_color
+{
+	color: #254;
+}
+.medium_color,
+A.medium_color,
+A:link.medium_color,
+A:visited.medium_color,
+A:hover.medium_color
+{
+	color: #8c8;
+}
+.highlight_color,
+A.highlight_color,
+A:link.highlight_color,
+A:visited.highlight_color,
+A:hover.highlight_color,
+.alert,
+A.alert
+{
+	color: #f60;
+}
+.light_color,
+A.light_color,
+A:link.light_color,
+A:visited.light_color,
+A:hover.light_color
+{
+	color: #cfb;
+}
+
+/* Header menu */
+.header {
+  border-bottom: 1px solid #254;
+  background-color: #8c8;
+  clear: both;
+  height: 4em;
+  margin: 0px;
+  padding: 0px;
+  width: 100%;
+}
+.header .logo {
+	display: inline;
+	left: 5px;
+	position: absolute;
+	top: 5px;
+}
+.header .logo img {
+  height: 50px;
+  width: 50px;
+}
+.header .title {
+	font-size: 2.5em;
+	left: 60px;
+	position: absolute;
+	top: 0px;
+	width: 4em;
+}
+.header .subtitle {
+	color: #cfb;
+	left: 60px;
+	position: absolute;
+	top: 2.5em;
+}
+.header .subtitle,
+.header .subtitle A
+{
+	color: #cfb;
+}
+.header A
+{
+	font-weight: normal;
+	text-decoration: none;
+}
+
+ul.menu {
+  bottom: 0px;
+  position: absolute;
+  right: 0px;
+  margin: 0px;
+  padding: 10px 0px 10px 0px;
+  border-top: 1px solid #254;
+}
+ul.menu li {
+  border-left: 1px solid #254;
+  display: inline;
+  margin: 0px;
+	padding: 10px;
+  width: 100px;
+}
+ul.menu li a {
+  color: #254;
+  font-weight: bold;
+  text-decoration: none;
+}
+ul.menu li a:hover {
+  color: #cfb;
+}
+
+/* Footer menu */
+.footer {
+	border-top: 1px solid #cfb;
+  clear: both;
+	margin-top: 20px;
+	margin-bottom: 15px;
+	text-align: center;
+}
+.footer ul li {
+	display: inline;
+	margin: 0px 10px;
+}
+
+/* Page formatting */
+.page {
+  background-color: #fff;
+  border: 1px solid #254;
+  width: 900px;
+}
+.page .main {
+  padding: 10px;
+}
+.page .lat_lng_page h2 {
+  font-size: 1em;
+}
+
+/* Map & settings */
+#map {
+  border: 1px solid #254;
+  height: 500px;
+  margin-top: 5px;
+  width: 600px;
+}
+ul.gr_item_list {
+  float: right;
+  width: 270px;
+  margin: 0px;
+  padding: 0px;
+}
+ul.gr_item_list li {
+  border-top: 1px solid #cfb;
+  list-style-type: none;
+}
+ul.gr_item_list li img {
+  border: 1px solid #000;
+  width: 100px;
+}
+ul.gr_item_list li.found_item {
+  background-color: #cfb;
+  border: 2px solid #254;
+  font-size: 1.2em;
+  font-weight: bold;
+  padding: 5px;
+  text-align: center;
+}
+ul.gr_item_list li.found_item img {
+  width: 200px;
+}
+ul.gr_item_list li.additional_item_header {
+  border-top-width: 0px;
+  font-style: italic;
+  margin-top: 15px;
+}
+
+/* Search page layout */
+.search_page button, .search_page .button {
+  height: 2em;
+  width: 90px;
+}
+.search_page h1 {
+  font-size: 1.5em;
+}
+.search_page h2 {
+  font-size: 1em;
+  font-weight: normal;
+  margin-bottom: 15px;
+}
+.search_page #code {
+  height: 2.5em;
+}
+.search_page #found_addr {
+  font-weight: bold;
+}
+.search_page #generated_code {
+  font-size: 0.75em;
+  font-weight: normal;
+}
+.search_page #location {
+  font-size: 1.5em;
+  font-weight: normal;
+  width: 500px;
+}
+.search_page ul.gr_item_list .additional_item button,
+.search_page ul.gr_item_list .additional_item .button {
+  font-size: .75em;
+  width: auto;
+}
+.search_page ul.gr_item_list .input_field input {
+  font-size: 1.5em;
+  font-weight: normal;
+  width: 100%;
+}
+.search_page ul.gr_item_list .input_field textarea {
+  width: 100%;
+}
+.search_page ul.gr_item_list .input_prompt {
+  text-transform: capitalize;
+}
+
+
+/* Alternate layouts */
+.min_layout .page {
+  height: 480px;
+  overflow: hidden;
+  width: 600px;
+}
+.min_layout .page .main {
+  padding: 2px;
+}
+.min_layout h1 {
+  height: 24px;
+  font-size: 20px;
+}
+.min_layout .page .lat_lng_page h2 {
+  font-size: 15px;
+}
+.min_layout #map {
+  height: 400px;
+  width: 400px;
+}
+.min_layout ul.gr_item_list {
+  font-size: 12px;
+  height: 428px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  width: 192px;
+}
+.min_layout ul.gr_item_list li.additional_item {
+  font-size: 10px;
+}
+.min_layout .change_radius {
+  font-size: 12px;
+}
+.min_layout .change_radius input,
+.min_layout .change_radius select {
+  font-size: 10px;
+}
+.min_layout ul.gr_item_list li.found_item img {
+  width: 160px;
+}
+.min_layout .header {
+  border-left: 1px solid #254;
+  height: 24px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  width: 90px;
+  z-index: 100;
+}
+.min_layout .header .logo {
+  left: 2px;
+  top: 2px;
+}
+.min_layout .header .logo img {
+  height: 20px;
+  width: 20px;
+}
+.min_layout .header .title {
+  font-size: 10px;
+  left: 25px;
+  top: 11px;
+  width: auto;
+}
+.min_layout .header .subtitle {
+  font-size: 10px;
+  left: 25px;
+  top: 0px;
+  width: auto;
+}
+
+
+
+

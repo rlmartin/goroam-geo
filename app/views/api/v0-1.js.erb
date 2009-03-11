@@ -1,0 +1,14 @@
+<% version_dir = "api/js/v0.1" %>
+<%= render :partial => "#{version_dir}/goroam_init" %>
+<%= render :partial => "#{version_dir}/core_extension" %>
+<%= render :partial => "#{version_dir}/browser" %>
+<%= render :partial => "#{version_dir}/array" %>
+<%= render :partial => "#{version_dir}/math" %>
+<%= render :partial => "#{version_dir}/http" %>
+<%= render :partial => "#{version_dir}/controls" %>
+<%= render :partial => "#{version_dir}/google_maps" %>
+<%= render :partial => "#{version_dir}/system" %>
+<%= render :partial => "#{version_dir}/dhtml" %>
+<%= render :partial => "#{version_dir}/xdcomm" %>
+google.setOnLoadCallback(function() {goroam.google.maps.load(goroam.google.maps.load_from_page);});
+

@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  api_url: MyString
+  valid_url: false
+  requesting_url: MyString
+  requesting_host: MyString
+  ip_address: MyString
+
+two:
+  api_url: MyString
+  valid_url: false
+  requesting_url: MyString
+  requesting_host: MyString
+  ip_address: MyString

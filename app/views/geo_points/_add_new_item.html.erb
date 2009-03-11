@@ -1,0 +1,2 @@
+<% if defined?(geo_point)%><%= link_to Constant::get(:add_geotag_link_text), new_item_path(geo_point.lat_s, geo_point.lng_s), :id => 'add_tag_link' %>
+<% else %><%= link_to Constant::get(:add_geotag_link_text), '', :id => 'add_tag_link' %><% end %>

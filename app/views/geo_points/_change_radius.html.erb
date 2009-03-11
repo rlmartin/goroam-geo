@@ -1,0 +1,11 @@
+<div class='change_radius'>
+  <%= Constant::get(:change_radius_prompt_text) %>
+  <nobr>
+  <input type='text' id='dist' size='5' <% if defined? dist %>value='<%= dist %>' <% end %>/>
+  <select id='units'>
+    <option value='mi'<% if defined?(units) and (units == :miles) %> selected='selected'<% end %>><%= Constant::get(:miles_text) %></option>
+    <option value='km'<% if defined?(units) and (units == :kms) %> selected='selected'<% end %>><%= Constant::get(:kilometers_text) %></option>
+  </select>
+  </nobr>
+  <input type='button' value='<%= Constant::get(:go_submit_button_text) %>' onclick='var iDist = document.getElementById("dist").value; if (goroam.system.is_numeric(iDist) && (iDist != "")) { location.href = "<% if defined?(geo_point) %><%= geo_point_path(geo_point.lat_s, geo_point.lng_s) %><% end %>/" + iDist + document.getElementById("units").value; return true; } else { alert("<%= Constant::get(:error_invalid_distance) %>"); return false; }' />
+</div>

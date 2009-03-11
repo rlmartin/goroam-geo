@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  title: Crested Butte
+  value: http://www.crestedbutte-co.gov/vertical/Sites/%7B6058FFBB-CB06-4864-B42F-B476F794BE07%7D/uploads/%7B1F9450CD-E8B7-4D54-B883-61379E36B30F%7D.JPG
+  data_type: image
+  geo_points: cb
+
+two:
+  title: Englewood Cliffs
+  value: http://www.englewoodcliffsnj.org/
+  data_type: url
+  geo_points: ec
+
+three:
+  title: My Old Hood
+  value: I used to live here
+  data_type: raw_text
+  geo_points: cb, tudorcity, oldebirch

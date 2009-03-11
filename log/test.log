@@ -1,0 +1,453 @@
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = '--- :one\n') [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.6ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.8ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.6ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+Unable to load geo_points_item, underlying cause no such file to load -- geo_points_item 
+
+ /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+/usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:155:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:262:in `require_or_load'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:221:in `depend_on'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:133:in `require_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:856:in `try_to_load_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:871:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `each'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:851:in `fixtures'
+./test/test_helper.rb:35
+./test/unit/geo_point_test.rb:1:in `require'
+./test/unit/geo_point_test.rb:1
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `load'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `each'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+Unable to load geo_points_item, underlying cause no such file to load -- geo_points_item 
+
+ /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+/usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:155:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:262:in `require_or_load'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:221:in `depend_on'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:133:in `require_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:856:in `try_to_load_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:871:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `each'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:851:in `fixtures'
+./test/test_helper.rb:35
+./test/unit/geo_point_test.rb:1:in `require'
+./test/unit/geo_point_test.rb:1
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `load'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `each'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.6ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+Unable to load geo_points_item, underlying cause no such file to load -- geo_points_item 
+
+ /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+/usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:155:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:262:in `require_or_load'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:221:in `depend_on'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:133:in `require_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:856:in `try_to_load_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:871:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `each'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:851:in `fixtures'
+./test/test_helper.rb:35
+./test/unit/geo_point_test.rb:1:in `require'
+./test/unit/geo_point_test.rb:1
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `load'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `each'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+Unable to load geo_points_item, underlying cause no such file to load -- geo_points_item 
+
+ /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+/usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:155:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:262:in `require_or_load'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:221:in `depend_on'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:133:in `require_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:856:in `try_to_load_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:871:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `each'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:851:in `fixtures'
+./test/test_helper.rb:35
+./test/unit/geo_point_test.rb:1:in `require'
+./test/unit/geo_point_test.rb:1
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `load'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `each'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 1) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+Unable to load geo_points_item, underlying cause no such file to load -- geo_points_item 
+
+ /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+/usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:155:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:262:in `require_or_load'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:221:in `depend_on'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:133:in `require_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:856:in `try_to_load_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:871:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `each'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:851:in `fixtures'
+./test/test_helper.rb:35
+./test/unit/geo_point_test.rb:1:in `require'
+./test/unit/geo_point_test.rb:1
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `load'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `each'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 1) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+Unable to load geo_points_item, underlying cause no such file to load -- geo_points_item 
+
+ /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+/usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:155:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:262:in `require_or_load'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:221:in `depend_on'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:133:in `require_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:856:in `try_to_load_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:871:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `each'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:851:in `fixtures'
+./test/test_helper.rb:35
+./test/unit/geo_point_test.rb:1:in `require'
+./test/unit/geo_point_test.rb:1
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `load'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `each'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 1) [0m
+  [4;35;1mDataType Load (0.2ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mROLLBACK[0m
+Unable to load geo_points_item, underlying cause no such file to load -- geo_points_item 
+
+ /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+/usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:155:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:262:in `require_or_load'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:221:in `depend_on'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:133:in `require_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:856:in `try_to_load_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:871:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `each'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:851:in `fixtures'
+./test/test_helper.rb:35
+./test/unit/geo_point_test.rb:1:in `require'
+./test/unit/geo_point_test.rb:1
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `load'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `each'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 1) [0m
+  [4;35;1mDataType Load (0.2ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mDataType Load (0.1ms)[0m   [0;1mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+Unable to load geo_points_items1, underlying cause no such file to load -- geo_points_items1 
+
+ /usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `gem_original_require'
+/usr/local/lib/site_ruby/1.8/rubygems/custom_require.rb:31:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:155:in `require'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:262:in `require_or_load'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:221:in `depend_on'
+/usr/lib/ruby/gems/1.8/gems/activesupport-2.2.2/lib/active_support/dependencies.rb:133:in `require_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:856:in `try_to_load_dependency'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:871:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `each'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:868:in `require_fixture_classes'
+/usr/lib/ruby/gems/1.8/gems/activerecord-2.2.2/lib/active_record/fixtures.rb:851:in `fixtures'
+./test/test_helper.rb:35
+./test/unit/geo_point_test.rb:1:in `require'
+./test/unit/geo_point_test.rb:1
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `load'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5:in `each'
+/usr/lib/ruby/gems/1.8/gems/rake-0.8.3/lib/rake/rake_test_loader.rb:5
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 1) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mDataType Load (0.2ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mDataType Load (0.1ms)[0m   [0;1mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mDataType Load (0.2ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mDataType Load (0.1ms)[0m   [0;1mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mDataType Load (0.2ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mDataType Load (0.1ms)[0m   [0;1mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mDataType Load (0.2ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mDataType Load (0.1ms)[0m   [0;1mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mItem Load (0.1ms)[0m   [0mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;36;1mJoin Table Columns (0.8ms)[0m   [0;1mSHOW FIELDS FROM `geo_points_items`[0m
+  [4;35;1mGeoPoint Load (1.2ms)[0m   [0mSELECT * FROM `geo_points` INNER JOIN `geo_points_items` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`geo_points_items`.item_id = 953125641 ) [0m
+  [4;36;1mGeoPoint Load (0.2ms)[0m   [0;1mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6697348) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mDataType Load (0.2ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mDataType Load (0.1ms)[0m   [0;1mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mItem Load (0.1ms)[0m   [0mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;36;1mGeoPoint Load (0.3ms)[0m   [0;1mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6697348) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mDataType Load (0.2ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mDataType Load (0.1ms)[0m   [0;1mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;35;1mSQL (1.0ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mItem Load (0.1ms)[0m   [0mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;36;1mGeoPoint Load (0.3ms)[0m   [0;1mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6697348) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mDataType Load (0.2ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mDataType Load (0.1ms)[0m   [0;1mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mItem Load (0.1ms)[0m   [0mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;36;1mGeoPoint Load (0.3ms)[0m   [0;1mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6697348) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 996332877) [0m
+  [4;35;1mGeoPoint Load (0.2ms)[0m   [0mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6832647) [0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mGeoPoint Load (0.2ms)[0m   [0mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 444353530) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.1ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mDataType Load (0.7ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mDataType Load (0.1ms)[0m   [0;1mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mItem Load (0.1ms)[0m   [0mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;36;1mGeoPoint Load (0.2ms)[0m   [0;1mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6697348) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 996332877) [0m
+  [4;35;1mGeoPoint Load (0.2ms)[0m   [0mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6832647) [0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mGeoPoint Load (0.2ms)[0m   [0mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 444353530) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.1ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mDataType Load (0.3ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mDataType Load (0.1ms)[0m   [0;1mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mItem Load (0.1ms)[0m   [0mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;36;1mGeoPoint Load (0.3ms)[0m   [0;1mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6697348) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 996332877) [0m
+  [4;35;1mGeoPoint Load (0.2ms)[0m   [0mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6832647) [0m
+  [4;36;1mItem Load (0.4ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mGeoPoint Load (0.2ms)[0m   [0mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 444353530) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.1ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mDataType Load (0.3ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mDataType Load (0.1ms)[0m   [0;1mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mItem Load (0.1ms)[0m   [0mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;36;1mGeoPoint Load (0.2ms)[0m   [0;1mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6697348) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 996332877) [0m
+  [4;35;1mGeoPoint Load (0.2ms)[0m   [0mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6832647) [0m
+  [4;36;1mItem Load (0.4ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mGeoPoint Load (0.2ms)[0m   [0mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 444353530) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.1ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mDataType Load (0.3ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mDataType Load (0.1ms)[0m   [0;1mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mItem Load (0.1ms)[0m   [0mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;36;1mGeoPoint Load (0.2ms)[0m   [0;1mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6697348) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET SQL_AUTO_IS_NULL=0[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 996332877) [0m
+  [4;35;1mGeoPoint Load (0.2ms)[0m   [0mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6832647) [0m
+  [4;36;1mItem Load (0.5ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mGeoPoint Load (0.2ms)[0m   [0mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 444353530) [0m
+  [4;36;1mGeoPoint Load (0.2ms)[0m   [0;1mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 176657235) [0m
+  [4;35;1mGeoPoint Load (0.2ms)[0m   [0mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6697348) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mItem Load (0.1ms)[0m   [0;1mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;35;1mDataType Load (0.2ms)[0m   [0mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;36;1mDataType Load (0.1ms)[0m   [0;1mSELECT * FROM `data_types` WHERE (`data_types`.`id` = 631179027) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mItem Load (0.1ms)[0m   [0mSELECT items.*, geo_points.lat, geo_points.lng FROM `items` INNER JOIN `geo_points_items` ON `geo_points_items`.item_id = `items`.id INNER JOIN `geo_points` ON `geo_points`.id = `geo_points_items`.geo_point_id WHERE (`items`.`id` = 953125641) [0m
+  [4;36;1mGeoPoint Load (0.1ms)[0m   [0;1mSELECT * FROM `geo_points` WHERE (`geo_points`.`id` = 6697348) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m

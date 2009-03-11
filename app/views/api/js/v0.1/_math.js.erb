@@ -1,0 +1,116 @@
+/********************************
+ * OBJECT:	compass_position
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2006.05.14
+ * DESCRIPTION:	This object can be loaded to figure out the x any y multipliers to position
+ *		something in a cardinal direction from another item.
+ * PARAMETERS:	strPosition	Any cardinal direction abbreviation, or c (for center).
+ * RETURNS:	The CompassPosition object
+ */
+
+goroam.math.compass_position = function(strPosition, strOrientation) {
+	var _self = this; 				// Save a reference to the object for later, to prevent confusion with the event 'this' object.
+	_self.__position = '';
+	_self.__orientation = '';
+	_self.x = 0;
+	_self.y = 0;
+	_self.set_position(strPosition, strOrientation);
+};
+// A function to figure out the x-coordinate of the compass position edge, based on
+// a given x-coord and the width of the object. Both are required.
+goroam.math.compass_position.prototype.get_edge_left = function(iX, iWidth) {
+	return iX + (this.x * (iWidth == 0 ? 0 : iWidth / 2));
+};
+// A function to figure out the y-coordinate of the compass position edge, based on
+// a given y-coord and the height of the object. Both are required.
+goroam.math.compass_position.prototype.get_edge_top = function(iY, iHeight) {
+	return iY + (this.y * (iHeight == 0 ? 0 : iHeight / 2));
+};
+// A function to figure out the x-coordinate of the left of the object, based on
+// a given x-coord and the width of the object. Both are required.
+goroam.math.compass_position.prototype.get_left = function(iX, iWidth) {
+	// 0 should center (thus the -0.5) and 1 needs to take width into account (thus the 0).
+	return iX + (iWidth * (this.x == 0 ? -0.5 : (this.x == 1 ? 0 : this.x)));
+};
+// A function to figure out the y-coordinate of the top of the object, based on
+// a given y-coord and the height of the object. Both are required.
+goroam.math.compass_position.prototype.get_top = function(iY, iHeight) {
+	// 0 should center (thus the -0.5) and 1 needs to take height into account (thus the 0).
+	return iY + (iHeight * (this.y == 0 ? -0.5 : (this.y == 1 ? 0 : this.y)));
+};
+// A function to switch between browser orientation (which starts upper left corner
+// and positive x is right and positive y is down) or normal orientation (which starts
+// lower left corner and positive x is left and positive y is up).  Defaults to
+// browser positioning.
+goroam.math.compass_position.prototype.set_orientation = function(strOrientation) {
+	var _self = this;
+	strOrientation = strOrientation || '';
+	strOrientation = strOrientation.toLowerCase();
+	// Only accept browser or normal.
+	if ((strOrientation == 'browser') || (strOrientation == 'normal')) {
+		// Only change the values is the orientation is different.
+		if (_self.__orientation != strOrientation) {
+			_self.__orientation = strOrientation;
+			_self.y *= -1
+		}
+	}
+}
+// A function to set the position.
+goroam.math.compass_position.prototype.set_position = function(strPosition, strOrientation) {
+	var _self = this;
+	// Default to empty string and make it lower case.
+	strPosition = strPosition || '';
+	strPosition = strPosition.toLowerCase();
+	strOrientation = strOrientation || '';
+	strOrientation = strOrientation.toLowerCase();
+	_self.__position = strPosition;
+	switch (_self.__position) {
+		case 'n':
+			_self.x = 0;
+			_self.y = -1;
+			break;
+		case 'ne':
+			_self.x = 1;
+			_self.y = -1;
+			break;
+		case 'e':
+			_self.x = 1;
+			_self.y = 0;
+			break;
+		case 'se':
+			_self.x = 1;
+			_self.y = 1;
+			break;
+		case 's':
+			_self.x = 0;
+			_self.y = 1;
+			break;
+		case 'sw':
+			_self.x = -1;
+			_self.y = 1;
+			break;
+		case 'w':
+			_self.x = -1;
+			_self.y = 0;
+			break;
+		case 'nw':
+			_self.x = -1;
+			_self.y = -1;
+			break;
+		default:
+			_self.x = 0;
+			_self.y = 0;
+			break;
+	}
+	// If the orientation is empty, use the current orientation; if the orientation
+	// is given, set it to that value.
+	strOrientation = (strOrientation == '') ? _self.__orientation : strOrientation;
+	// The switch above is based on a 'browser' orientation. Reset those values
+	// based on the given orientation.
+	_self.__orientation = 'browser';
+	_self.set_orientation(strOrientation);
+}
+// A function to print out the values.
+goroam.math.compass_position.prototype.toString = function() {
+	return '(' + this.x + ', ' + this.y + ')';
+}

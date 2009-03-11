@@ -1,0 +1,7 @@
+<item>
+  <title><%= item.title %></title>
+  <link><%= Constant::get(:root_url) + '/' + (defined?(geo_point) ? "#{geo_point.lat_s}/#{geo_point.lng_s}" : "#{item.lat_s}/#{item.lng_s}") + "?find=" + CGI::escape("#{item.value}") %></link>
+  <description><%= Constant::get(:rss_item_description) % [item.data_type.name, (defined?(geo_point) ? "(#{geo_point.lat_s}, #{geo_point.lng_s})" : "(#{item.lat_s}, #{item.lng_s})"), (defined?(dist_geo_point) ? item.distance_to(dist_geo_point, { :units => units }) : 0), DistLib.units_text((defined?(units) ? units : :miles))] %></description>
+  <pubDate><%= item.updated_at.strftime('%a, %d %b %Y %H:%M:%S %Z') %></pubDate>
+  <guid><%= Constant::get(:root_url) %>/item/<%= item.id %></guid>
+</item>

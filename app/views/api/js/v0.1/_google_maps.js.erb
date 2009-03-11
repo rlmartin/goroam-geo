@@ -1,0 +1,713 @@
+goroam.google.maps.version = '2.142';
+if ((goroam.browser.host_info().name == goroam.enm.browsers.safari) && (goroam.browser.host_info().major_ver < 525)) goroam.google.maps.version = '2.88';
+
+google.load('maps', goroam.google.maps.version);
+
+// Load local variables for functions.
+goroam.google.maps.__active_map = undefined;
+goroam.google.maps.__active_map_id = '<%= @settings[:map] %>';
+goroam.google.maps.__page_maps = {};
+goroam.google.maps.__lat_attr = '<%= Constant::get(:lat_attribute) %>';
+goroam.google.maps.__lng_attr = '<%= Constant::get(:lng_attribute) %>';
+goroam.google.maps.__map_attr = '<%= Constant::get(:map_attribute) %>';
+
+// I added this because the real version uses event listeners, which are called in
+// opposite directions in IE vs Moz (FIFO vs FILO).  I added this so that it would
+// have the same functionality, but would work as FIFO in all browsers.
+google.__setOnLoadCallback = google.setOnLoadCallback;
+google.__onload_callback_functions = [];
+google.__onload_callback = function(e) {
+	for (var i = 0; i < google.__onload_callback_functions.length; i++) {
+		google.__onload_callback_functions[i](e);
+	}
+};
+google.__setOnLoadCallback(google.__onload_callback);
+google.setOnLoadCallback = function(fFunc) { google.__onload_callback_functions.add_if_new(fFunc); };
+
+
+/********************************
+ * FUNCTION:	extend_functionality
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.01.25
+ * DESCRIPTION:	This function extends the out-of-the-box Google Maps objects.
+ * PARAMETERS:	none
+ * RETURNS:		  none
+ */
+goroam.google.maps.extend_functionality = function() {
+  // Map2 object extensions
+  // New "local" variables
+  google.maps.Map2.prototype.active_marker = undefined;
+  google.maps.Map2.prototype.__bounds = new google.maps.LatLngBounds();
+
+  // New methods
+  google.maps.Map2.prototype.add_lat_lng = function(dLat, dLng) {
+    var strKey = dLat + '_' + dLng;
+    if (!this.__lat_lng) this.__lat_lng = {};
+    if (this.__lat_lng[strKey]) {
+      // Do something here for multiple hits on the same lat/lng.
+    } else {
+      var objLatLng = new google.maps.LatLng(dLat, dLng);
+      var objMarker = goroam.google.maps.create_marker(objLatLng);
+      this.__lat_lng[strKey] = objMarker;
+      this.addOverlay(this.__lat_lng[strKey]);
+      this.__bounds.extend(objLatLng);
+    }
+    // Return the object that was created.
+    return this.__lat_lng[strKey];
+  }
+
+  google.maps.Map2.prototype.__addOverlay = google.maps.Map2.prototype.addOverlay;
+  google.maps.Map2.prototype.addOverlay = function(objOverlay) {
+    this.__addOverlay(objOverlay);
+    objOverlay.map = this;
+  }
+  google.maps.Map2.prototype.__removeOverlay = google.maps.Map2.prototype.removeOverlay;
+  google.maps.Map2.prototype.removeOverlay = function(objOverlay) {
+    this.__removeOverlay(objOverlay);
+    objOverlay.map = undefined;
+  }
+
+  // This function creates a marker in the given lat/lng, or at the center of the map if one is not given.
+  // Use the bolDraggable flag to make the marker draggable.
+  google.maps.Map2.prototype.create_active_marker = function(objLatLng, bolDraggable) {
+    objLatLng = (objLatLng || this.getCenter());
+    this.active_marker = goroam.google.maps.create_marker(objLatLng, {draggable: true});
+    this.addOverlay(this.active_marker);
+    goroam.event.addListener(this.active_marker, 'dragend', function(objLatLng) { goroam.event.trigger(this.map, 'location_found', objLatLng); });
+  }
+
+  // This function searched for the given location and recenters the map on that location if found.
+  google.maps.Map2.prototype.goto_location = function(strLocation) {
+    goroam.google.maps.find_location(this, strLocation, function(objPoint, strAddress, objPlacemark) {
+      if (objPlacemark && objPlacemark.ExtendedData && objPlacemark.ExtendedData.LatLonBox) {
+        this.recenter_active_marker(objPoint, new google.maps.LatLngBounds(new google.maps.LatLng(objPlacemark.ExtendedData.LatLonBox.south, objPlacemark.ExtendedData.LatLonBox.west), new google.maps.LatLng(objPlacemark.ExtendedData.LatLonBox.north, objPlacemark.ExtendedData.LatLonBox.east)));
+      } else {
+        this.recenter_active_marker(objPoint);
+      }
+      goroam.event.trigger(this, 'location_found', objPoint, strAddress, objPlacemark); });
+  }
+
+  // This function moves the active marker to a given lat/lng and recenters/resizes the map on that point.
+  // objZoom can be either a zoom level (int) or a GLatLngBounds object.
+  google.maps.Map2.prototype.recenter_active_marker = function(objLatLng, objZoom) {
+    if (this.active_marker) {
+      // Change the lat/lng of the marker if it already exists.
+      this.active_marker.setLatLng(objLatLng);
+    } else {
+      // Create the marker if it does not already exist.
+      this.create_active_marker(objLatLng, false);
+    }
+    // Recenter the map on the moved marker.
+    if (goroam.system.is_numeric(objZoom) || (objZoom == undefined)) {
+      this.setCenter(objLatLng, objZoom);
+    } else {
+      this.resize_to_bounds(objZoom);
+    }
+  }
+  
+  // This function resizes and recenters the map based on either a) the optional bounds object or b) the map's
+  // internal bounds object.  Returns true upon success.
+  google.maps.Map2.prototype.resize_to_bounds = function(objLatLngBounds) {
+    var bolResult = false;
+    // Default to resizing to the map's bounds.
+    objLatLngBounds = (objLatLngBounds || this.__bounds);
+    if (objLatLngBounds && !objLatLngBounds.isEmpty()) {
+      var iZoom = this.getBoundsZoomLevel(objLatLngBounds);
+      this.setCenter(objLatLngBounds.getCenter(), iZoom);
+    }
+    return bolResult;
+  }
+
+
+
+  // This function shows a focus_overlay at the given lat/lng point.
+  google.maps.Map2.prototype.show_focus = function(objLatLng) {
+    if (!this.__focus_overlay) {
+      this.__focus_overlay = goroam.google.maps.create_focus_overlay(objLatLng);
+      this.addOverlay(this.__focus_overlay);
+    } else {
+      if (this.__focus_overlay.map != this) this.addOverlay(this.__focus_overlay);
+      this.__focus_overlay.setLatLng(objLatLng);
+    }
+  }
+
+
+
+  // These functions show/hide a GLayer on the map.
+  google.maps.Map2.prototype.show_layer = function(strId) {
+    if (!this.__layers) this.__layers = {};
+    if (!this.__layers[strId]) {
+      this.__layers[strId] = new google.maps.Layer(strId);
+      this.addOverlay(this.__layers[strId]);
+    }
+    this.__layers[strId].show();
+  }
+  google.maps.Map2.prototype.hide_layer = function(strId) {
+    if (!this.__layers) this.__layers = {};
+    if (this.__layers[strId]) this.__layers[strId].hide();
+  }
+
+
+
+  /********************************
+   * OBJECT:	html_overlay
+   * WRITTEN BY:	Ryan Martin
+   * WRITTEN ON:	2006.05.13
+   * DESCRIPTION:	This object is used to place any HTML onto a Google Map at a given
+   *		latitude/longitude.
+   * BROWSERS:	IE		Good
+   *		Firefox		Good
+   *		Netscape	Good
+   * PARAMETERS:	arrInit		A named map array of init values (as follows:)
+   *					class_name	Optional. A className to assign to the container for CSS.
+   *					container	Optional. The HTML element to place on the map. If not given, a new DIV is created.
+   *					lat_lng		A LatLng object, at which the HTML should be located.
+  external to the object.
+   *					position	Optional. The compass_position of the object relative to the lat_lng. Defaults to centered.
+   * RETURNS:	The GHTML object
+   */
+
+  goroam.google.maps.html_overlay = function(arrInit) {
+    var _self = this;
+    // Create the container for the object.
+    if (arrInit && arrInit.container) {
+      _self.__container = arrInit.container;
+    } else {
+      _self.__container = document.createElement('div');
+    }
+    // Make sure the container has a default className and any given className.
+    goroam.dhtml.edit_class_name(_self.__container, '<%= Constant::get(:css_prefix) %>html_overlay' + ((arrInit && arrInit.class_name) ? ' ' + arrInit.class_name : ''), '', true);
+    // Set the LatLng
+    if (arrInit && arrInit.lat_lng) _self.__lat_lng = arrInit.lat_lng;
+    // Set the position; defaults to empty string.
+    _self.__position = (arrInit && arrInit.position) ? arrInit.position : '';
+  };
+  // The object is based off of empty GOverlay class.
+  goroam.google.maps.html_overlay.prototype = new google.maps.Overlay();
+  // Copy the html_overlay into a new object.
+  goroam.google.maps.html_overlay.prototype.copy = function() {
+	  var _self = this;
+	  var objCopy = new goroam.google.maps.html_overlay({container: _self.__container.cloneNode(true), lat_lng: _self.__lat_lng, position: _self.__position});
+	  // Create a copy of the object with the new unique ID.
+	  return objCopy;
+  }
+  // A method used to get the overlay's HTML container.
+  goroam.google.maps.html_overlay.prototype.get_container = function() {
+    return this.__container;
+  }
+  // A method used to get the overlay's lat/lng point.
+  goroam.google.maps.html_overlay.prototype.getLatLng = function() {
+    return this.__lat_lng;
+  }
+  // Initialize the html_overlay object by adding it to the map.
+  goroam.google.maps.html_overlay.prototype.initialize = function(objMap) {
+	  var _self = this;
+	  _self.__container.style.position = 'absolute';
+	  _self.map = objMap;
+	  _self.map.getPane(G_MAP_MARKER_PANE).appendChild(_self.__container);
+  };
+  // Move the html_overlay to a new point on the map.
+  goroam.google.maps.html_overlay.prototype.setLatLng = function(objLatLng) {
+	  var _self = this;
+	  var bolResult = false;
+	  if (objLatLng) {
+		  _self.__lat_lng = objLatLng;
+		  _self.redraw(true);
+		  bolResult = true;
+	  }
+	  return bolResult;
+  };
+  // Redraw the HTML node based on the current projection and zoom level.
+  goroam.google.maps.html_overlay.prototype.redraw = function(force) {
+	  var _self = this;
+	  // We only need to redraw if the coordinate system has changed
+	  if (!force || !(_self.map)) return;
+	  // Calculate the DIV location based on the map location and zoom level.
+	  var objCenter = _self.map.fromLatLngToDivPixel(_self.__lat_lng);
+
+	  // Now position our DIV based on the map's DIV coordinates.
+	  var objPosition = new goroam.math.compass_position(_self.__position);
+	  _self.__container.style.left = objPosition.get_left(objCenter.x, _self.__container.offsetWidth) + 'px';
+	  _self.__container.style.top = objPosition.get_top(objCenter.y, _self.__container.offsetHeight) + 'px';
+  };
+  // Remove the html_overlay from the map pane
+  goroam.google.maps.html_overlay.prototype.remove = function() {
+    var elContainer = this.__container;
+    elContainer.parentNode.removeChild(elContainer);
+  };
+}
+
+
+
+/********************************
+ * FUNCTION:	create_focus_overlay
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.01.29
+ * DESCRIPTION:	This function creates an html_overlay.
+ * PARAMETERS:	objLatLng   The lat/lng point where the overlay should be placed.
+ * RETURNS:	The newly created goroam.google.maps.html_overlay
+ */
+goroam.google.maps.create_focus_overlay = function(objLatLng) {
+  var objResult = new goroam.google.maps.html_overlay({lat_lng: objLatLng, class_name: '<%= Constant::get(:css_prefix) %>focus_overlay'});
+  objResult.__redraw = objResult.redraw;
+  objResult.redraw = function(bolForce) {
+    var _self = this;
+    // Turn on stage 1.
+    goroam.dhtml.edit_class_name(_self.get_container(), 'focus_overlay_stage1');
+    _self.__redraw(bolForce);
+    window.setTimeout(function() {
+      goroam.dhtml.edit_class_name(_self.get_container(), 'focus_overlay_stage2', 'focus_overlay_stage1');
+      _self.__redraw(bolForce);
+      window.setTimeout(function() {
+        goroam.dhtml.edit_class_name(_self.get_container(), 'focus_overlay_stage3', 'focus_overlay_stage2');
+        _self.__redraw(bolForce);
+        window.setTimeout(function() {
+          goroam.dhtml.edit_class_name(_self.get_container(), '', 'focus_overlay_stage3');
+          _self.__redraw(bolForce);
+          _self.map.removeOverlay(_self);
+        }, <%= Constant::get(:focus_overlay_interval) %>);
+      }, <%= Constant::get(:focus_overlay_interval) %>);
+    }, <%= Constant::get(:focus_overlay_interval) %>);
+  }
+  return objResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	create_marker
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.01.29
+ * DESCRIPTION:	This function creates a Google Maps Marker, with some default settings.
+ * PARAMETERS:	The same as a typical google.maps.Marker:
+ *              objLatLng   The lat/lng point where the marker should be placed.
+ *              objOptions  The options to use when creating the marker.
+ * RETURNS:	The newly created google.maps.Marker
+ */
+goroam.google.maps.create_marker = function(objLatLng, objOptions) {
+  var bolDraggable = false;
+  if (objOptions && objOptions.draggable) bolDraggable = objOptions.draggable;
+  if (!objOptions) objOptions = {};
+  objOptions.draggable = true;
+  objOptions.icon = goroam.google.maps.create_stock_icon('<%= @settings[:marker_icon] %>');
+  var objResult = new google.maps.Marker(objLatLng, objOptions);
+  if (!bolDraggable) objResult.disableDragging();
+  return objResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	create_icon
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.27
+ * DESCRIPTION:	This function creates a Google Maps Icon, with settings based on the given settings.
+ * PARAMETERS:	objSettings     The settings to use to create the icon.
+ *              strImageFolder  A root folder to use for image settings; can be blank.
+ * RETURNS:     The newly created google.maps.Icon
+ */
+goroam.google.maps.create_icon = function(objSettings, strImageFolder) {
+  var objResult = new google.maps.Icon();
+  strImageFolder = (strImageFolder || '');
+  for (var strName in objSettings) {
+    switch (strName) {
+      case 'image':
+      case 'printImage':
+      case 'printShadow':
+      case 'shadow':
+      case 'transparent':
+        objResult[strName] = strImageFolder + objSettings[strName];
+        break;
+      default:
+        objResult[strName] = objSettings[strName];
+    }
+  }
+  return objResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	create_stock_icon
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.27
+ * DESCRIPTION:	This function creates a Google Maps Icon, with settings based on the requested icon type.
+ * PARAMETERS:	strType   The type of icon being requested
+ * RETURNS:     The newly created google.maps.Icon
+ */
+goroam.google.maps.create_stock_icon = function(strType) {
+  strType = (strType || goroam.enm.icons.pushpin.orange).toLowerCase();
+  var strRootFolder = '<%= Constant::get(:root_url) %>/images/icons/markers/';
+  var objSettings, objResult;
+  switch (strType) {
+    case goroam.enm.icons.pushpin.blue:
+    case goroam.enm.icons.pushpin.green:
+    case goroam.enm.icons.pushpin.orange:
+    case goroam.enm.icons.pushpin.red:
+      objSettings = { iconAnchor: new google.maps.Point(9,32), iconSize: new google.maps.Size(32,32), image: 'red_pushpin.png', imageMap: [9,32, 10,29, 11,25, 5,16, 10, 12, 14,6, 12,2, 14,0, 18,0, 26,6, 21,15, 23,18, 23,22, 20,24, 14,25, 11,32], infoWindowAnchor: new google.maps.Point(9,32), printImage: 'red_pushpin.gif', printShadow: 'pushpin_shadow.gif', shadow: 'pushpin_shadow.png', shadowSize: new google.maps.Size(59,32), transparent: 'pushpin_transparent.png' };
+      switch (strType) {
+        case goroam.enm.icons.pushpin.blue:
+          objSettings.image = 'blue_pushpin.png';
+          objSettings.printImage = 'blue_pushpin.gif';
+          break;
+        case goroam.enm.icons.pushpin.green:
+          objSettings.image = 'green_pushpin.png';
+          objSettings.printImage = 'green_pushpin.gif';
+          break;
+        case goroam.enm.icons.pushpin.orange:
+          objSettings.image = 'orange_pushpin.png';
+          objSettings.printImage = 'orange_pushpin.gif';
+          break;
+      }
+      break;
+    case goroam.enm.icons.goroam:
+      objSettings = { iconAnchor: new google.maps.Point(8,40), iconSize: new google.maps.Size(34,40), image: 'goroam.png', imageMap: [8,40, 5,31, 0,22, 0,15, 4,8, 8,4, 26,0, 34,0, 34,7, 31,9, 34,13, 34,24, 26,32, 16,35, 11,40 ], infoWindowAnchor: new google.maps.Point(8,40), printImage: 'goroam.gif', printShadow: 'goroam_shadow.gif', shadow: 'goroam_shadow.png', shadowSize: new google.maps.Size(55,40), transparent: 'goroam_transparent.png' };
+      break;
+  }
+  if (objSettings) objResult = goroam.google.maps.create_icon(objSettings, strRootFolder);
+  return objResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	find_location
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2006.08.24
+ * DESCRIPTION:	This function takes a string describing a location, searches for it and if
+ *		found it calls the given callback function.
+ * PARAMETERS:	objMap			The GMap to recenter.
+ *				strLocation		The location to find.
+ *				fCallAfter		Optional. A function to call when done processing the search.  It will be passed the lat/lng
+ *                      of the location, a zoom level (if found), and the found address.
+ * RETURNS:	none
+ */
+goroam.google.maps.find_location = function(objMap, strLocation, fCallAfter) {
+	var fCallback = function(objGeoResult) {
+		var objPoint, strAddress, objPlacemark;
+		if ((objGeoResult) && (objGeoResult.Status)) {
+			if (objGeoResult.Status.code == 500) {
+				// Retry on HTTP failure. Sometimes this results in double attempts
+				// but I think the extra is better than not showing any result.
+        goroam.google.maps.find_location(objMap, strLocation, fCallAfter);
+			} else {
+				if ((objGeoResult) && (objGeoResult.Placemark)) {
+					if ((objGeoResult.Placemark.length) && (objGeoResult.Placemark.length > 0)) {
+            objPlacemark = objGeoResult.Placemark[0];
+						objPoint = objPlacemark.Point;
+            strAddress = objPlacemark.address;
+					} else if (objGeoResult.Placemark.Point) {
+            objPlacemark = objGeoResult.Placemark;
+						objPoint = objPlacemark.Point;
+            strAddress = objPlacemark.address;
+					}
+					if ((objPoint) && (objPoint.coordinates) && (objPoint.coordinates.length >= 2)) {
+						objPoint = new google.maps.LatLng(objPoint.coordinates[1], objPoint.coordinates[0]);
+					} else {
+						objPoint = undefined;
+            strAddress = undefined;
+            objPlacemark = undefined;
+					}
+				}
+				if (objPoint) {
+          if (fCallAfter) fCallAfter.call(objMap, objPoint, strAddress, objPlacemark);
+				} else {
+					alert('<%= Constant::get(:location_not_found) %>');
+				}
+				//objMap.unset_processing();
+			}
+		}
+	};
+	// Search for the location using the GMaps geocoder.
+	//objMap.set_processing();
+	var objGeocoder = new google.maps.ClientGeocoder();
+	objGeocoder.getLocations(strLocation, fCallback);
+}
+
+
+
+/********************************
+ * FUNCTION:	get_address
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.01.29
+ * DESCRIPTION:	This function translates the given lat/lng point to an address.
+ * PARAMETERS:	objLatLng   The point to look up.
+ *              fCallAfter  The function to call if the address is found.  Will be passed the address string and the
+ *                          more detailed GoogleMaps Placemark object.
+ * RETURNS:		  none
+ */
+goroam.google.maps.get_address = function(objLatLng, fCallAfter) {
+  var fCallback = function(objGeoResult) {
+    var objPlacemark;
+    if (objGeoResult && objGeoResult.Placemark && (objGeoResult.Placemark.length > 0)) {
+      // Find the most accurate placemark.
+      var arrAccuracy = [];
+      for (var i = 0; i < objGeoResult.Placemark.length; i++) {
+        arrAccuracy[objGeoResult.Placemark[i].AddressDetails.Accuracy] = objGeoResult.Placemark[i];
+      }
+      if (arrAccuracy.length > 0) objPlacemark = arrAccuracy[arrAccuracy.length - 1];
+    } else if (objGeoResult && objGeoResult.Placemark) {
+      objPlacemark = objGeoResult.Placemark;
+    }
+    if (objPlacemark) {
+      if (fCallAfter) fCallAfter.call(null, objPlacemark.address, objPlacemark);
+    } else {
+      alert('<%= Constant::get(:address_for_geo_point_not_found) %>');
+    }
+  }
+	var objGeocoder = new google.maps.ClientGeocoder();
+	objGeocoder.getLocations(objLatLng, fCallback);
+}
+
+
+
+/********************************
+ * FUNCTION:	get_map
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.01.27
+ * DESCRIPTION:	This function gets the active map on the page.
+ * PARAMETERS:	none
+ * RETURNS:		  GoogleMaps Map2 object
+ */
+goroam.google.maps.get_map = function(strMapId) {
+  if (strMapId && (strMapId != '')) goroam.google.maps.load_map_from_settings(strMapId);
+  return (goroam.google.maps.__page_maps[strMapId] || goroam.google.maps.__active_map);
+}
+
+
+
+/********************************
+ * FUNCTION:	load
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.01.25
+ * DESCRIPTION:	This function is a generalized load function to load a map page.  It will call the optional
+ *              function if one is passed in.
+ * PARAMETERS:	fFunc   Optional. A more specific function to call during the load process.
+ * RETURNS:		  none
+ */
+goroam.google.maps.load = function(fFunc) {
+  if (google.maps.BrowserIsCompatible()) {
+    // Extend the Google Maps objects
+    goroam.google.maps.extend_functionality();
+    // Try to prevent memory leaks.
+    goroam.event.addDomListener(window, 'unload', goroam.google.maps.unload);
+    // Call the function if given.
+    if (fFunc) fFunc();
+  } else {
+    alert('<%= Constant::get(:error_header) %><%= Constant::get(:error_browser_not_supported) %>');
+  }
+}
+
+
+
+/********************************
+ * FUNCTION:	load_active_map
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.01.25
+ * DESCRIPTION:	This function simply loads the active map and keeps track of the resultant map object.
+ * PARAMETERS:	none
+ * RETURNS:		  none
+ */
+goroam.google.maps.load_active_map = function() {
+  // Load the active map.
+  if (goroam.google.maps.load_map_from_settings(goroam.google.maps.__active_map_id)) goroam.google.maps.__active_map = goroam.google.maps.__page_maps[goroam.google.maps.__active_map_id];
+}
+
+
+
+/********************************
+ * FUNCTION:	load_from_page
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.01.25
+ * DESCRIPTION:	This function loads the map data from the HTML elements on the page.
+ * PARAMETERS:	none
+ * RETURNS:		  none
+ */
+goroam.google.maps.load_from_page = function() {
+  goroam.google.maps.load_active_map();
+  // Pull all HTML elements with lat/lng defined.
+  var arrLatLngElements = goroam.dhtml.get_elements_with_attribute(goroam.google.maps.__lat_attr);
+  for (var i = 0; i < arrLatLngElements.length; i++) {
+    var objMap = goroam.google.maps.get_map(arrLatLngElements[i].getAttribute(goroam.google.maps.__map_attr));
+    if (objMap) {
+      var objLatLng = objMap.add_lat_lng(arrLatLngElements[i].getAttribute(goroam.google.maps.__lat_attr), arrLatLngElements[i].getAttribute(goroam.google.maps.__lng_attr));
+      // Add event triggers to highlight the element when hovering over the map marker.
+      goroam.event.bind(objLatLng, 'mouseover', arrLatLngElements[i], goroam.dhtml.highlight);
+      goroam.event.bind(objLatLng, 'mouseout', arrLatLngElements[i], goroam.dhtml.unhighlight);
+      // Add a map prompt to the element.
+      goroam.google.maps.add_map_prompt(arrLatLngElements[i]);
+      // Send the element data back to the GoRoam server.
+      goroam.xdcomm.send_element(arrLatLngElements[i]);
+      // Resize and recenter the maps based on the loaded lat/lng points.
+      objMap.resize_to_bounds();
+    }
+  }
+}
+
+
+
+/********************************
+ * FUNCTION:	load_map_from_settings
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.01.25
+ * DESCRIPTION:	This function loads a map into the container with the given id, using the settings
+ *              defined by the javascript request.
+ * PARAMETERS:	strId   The id of the container in which to load the map.
+ * RETURNS:		  boolean True if the map was loaded successfully; false if not.
+ */
+goroam.google.maps.load_map_from_settings = function(strId) {
+  var bolResult = false;
+  var elContainer = document.getElementById(strId);
+  if (elContainer && !goroam.google.maps.__page_maps[strId]) {
+    var elAnchor = document.createElement('a');
+    elAnchor.name = strId;
+    elContainer.insertBefore(elAnchor, elContainer.firstChild);
+    var objMap = new google.maps.Map2(elContainer);
+    objMap.setCenter(new google.maps.LatLng(<%= @settings[:lat] %>, <%= @settings[:lng] %>), <%= @settings[:zoom] %>);
+    // Add map controls (zooming, map types, etc.)
+    try {
+      <%  case @settings[:controls]
+            when :all %>
+      objMap.addControl(new GLargeMapControl());
+      objMap.addControl(new GMapTypeControl());
+      objMap.addControl(new GOverviewMapControl());
+      objMap.addControl(new GScaleControl());
+      <%    when :all_small %>
+      objMap.addControl(new GSmallMapControl());
+      objMap.addControl(new GMenuMapTypeControl());
+      objMap.addControl(new GOverviewMapControl());
+      objMap.addControl(new GScaleControl());
+      <%    when :min %>
+      objMap.addControl(new GMenuMapTypeControl());
+      objMap.addControl(new GSmallZoomControl());
+      <%    when :none
+            else
+          end %>
+    } catch (e) {
+      objMap.addControl(new GSmallMapControl());
+      objMap.addControl(new GMapTypeControl());
+    }
+    goroam.google.maps.__page_maps[strId] = objMap;
+    bolResult = true;
+  }
+  return bolResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	add_map_prompt, over_map_element, leave_map_element
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.17
+ * DESCRIPTION:	This function displays a prompt to show the associated HTML element on a map.  To be used with the
+ *              onmouseover/onmouseout events of the element.
+ * PARAMETERS:	none
+ * RETURNS:		  none
+ */
+goroam.google.maps.add_map_prompt = function(elElement) {
+  if (!elElement.__map_prompt) {
+    // Add event triggers to the element to show/hide the map prompt.
+    goroam.event.bindDom(elElement, 'mouseover', elElement, goroam.dhtml.set_mouseover);
+    goroam.event.bindDom(elElement, 'mouseover', elElement, goroam.google.maps.over_map_element);
+    goroam.event.bindDom(elElement, 'mouseout', elElement, goroam.dhtml.unset_mouseover);
+    goroam.event.bindDom(elElement, 'mouseout', elElement, goroam.google.maps.leave_map_element);
+    goroam.event.bindDom(elElement, 'click', elElement, function(e) { if (this.__map_prompt && this.__map_prompt.__mouseover) goroam.dhtml.cancel_bubble(e); });
+    // Create a link to trigger the onclick event and move to the map's anchor on the page.
+    var elLink = document.createElement('a');
+    elLink.href = '#' + goroam.system.set_default(elElement.getAttribute(goroam.google.maps.__map_attr), '<%= @settings[:map] %>');
+    // The link is just a transparent image that fits the size of the container; this allows for controlling
+    // the display through CSS.
+    elLink.innerHTML = '<img src="<%= Constant::get(:root_url) %>/images/px.gif" style="border-width:0px; height:100%; width:100%;" title="<%= Constant::get(:show_on_map_prompt_text) %>" />';
+    // Create the container that holds the link and is the vessel for display styles.
+    elElement.__map_prompt = document.createElement('div');
+    elElement.__map_prompt.className = '<%= Constant::get(:css_prefix) %>map_prompt <%= Constant::get(:css_prefix) %>map_prompt_<%= @settings[:position] %>';
+    elElement.__map_prompt.appendChild(elLink);
+    // When hovering over the map prompt, use this class name instead of the default.
+    elElement.__map_prompt.__mouseover_class_name = 'map_prompt_hover';
+    elElement.__map_prompt.__mouseout_class_name = 'map_prompt_hover_element';
+    goroam.event.bindDom(elLink, 'click', elElement, goroam.google.maps.show_on_map);
+    goroam.event.bindDom(elElement.__map_prompt, 'mouseover', elElement.__map_prompt, goroam.dhtml.set_mouseover);
+    goroam.event.bindDom(elElement.__map_prompt, 'mouseout', elElement.__map_prompt, goroam.dhtml.unset_mouseover);
+    goroam.event.bindDom(elElement.__map_prompt, 'mouseout', elElement, goroam.google.maps.leave_map_element);
+    // Make sure the HTML element is positioned, so that the absolute positioning of the map prompt works correctly.
+    if (elElement.style.position != 'absolute') elElement.style.position = 'relative';
+    if (elElement.tagName.toLowerCase() == 'img') {
+      // Images do not have child elements, so drop it in a parent span and add the map prompt as a sibling node,
+      // instead of a child node.
+      var elSpan = document.createElement('span');
+      // Transfer positioning to the parent span.
+      elSpan.style.position = elElement.style.position;
+      elElement.style.position = 'relative';
+      elSpan.style.top = elElement.style.top;
+      elSpan.style.bottom = elElement.style.bottom;
+      elSpan.style.left = elElement.style.left;
+      elSpan.style.right = elElement.style.right;
+      // IE Hack to give the parent element "layout".
+      if (goroam.browser.host_info().name == goroam.enm.browsers.ie) elSpan.style.zoom = 1;
+      // Clear positioning from the image so that is uses the positioning transferred to the parent span.
+      elElement.style.top = '';
+      elElement.style.bottom = '';
+      elElement.style.left = '';
+      elElement.style.right = '';
+      // Insert the parent span into the DOM tree.
+      elElement.parentNode.replaceChild(elSpan, elElement);
+      elSpan.appendChild(elElement);
+      elSpan.appendChild(elElement.__map_prompt);
+    } else {
+      // IE Hack to give the parent element "layout".
+      if ((goroam.browser.host_info().name == goroam.enm.browsers.ie) && elElement.currentStyle && !elElement.currentStyle.hasLayout) elElement.style.zoom = 1;
+      elElement.appendChild(elElement.__map_prompt);
+    }
+  }
+}
+goroam.google.maps.over_map_element = function() {
+  if (!this.__map_prompt.__mouseover) goroam.dhtml.edit_class_name(this.__map_prompt, 'map_prompt_hover_element');
+}
+goroam.google.maps.leave_map_element = function() {
+  var self = this;
+  window.setTimeout(function() { if (!self.__mouseover && !self.__map_prompt.__mouseover) goroam.dhtml.edit_class_name(self.__map_prompt, '', 'map_prompt_hover_element'); }, <%= Constant::get(:exit_hover_timeout) %>);
+}
+
+
+
+/********************************
+ * FUNCTION:	show_on_map
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.17
+ * DESCRIPTION:	This function displays an item on a map, which may be either on the page on in a popup (based on
+ *              the api settings).
+ * PARAMETERS:	none
+ * RETURNS:		  none
+ */
+goroam.google.maps.show_on_map = function() {
+  var bolPopup = <%= @settings[:popup] == nil ? 'false' : 'true' %>;
+  var bolPopupWindow = <%= @settings[:popup_window] == nil ? 'false' : 'true' %>;
+  var strMapId = (this.getAttribute(goroam.google.maps.__map_attr) || goroam.google.maps.__active_map_id);
+  var objMap = goroam.google.maps.get_map(strMapId);
+  if (objMap && !(bolPopup || bolPopupWindow)) {
+    var objLatLng = new google.maps.LatLng(this.getAttribute(goroam.google.maps.__lat_attr), this.getAttribute(goroam.google.maps.__lng_attr));
+    objMap.setCenter(objLatLng);
+    objMap.show_focus(objLatLng);
+  } else if (bolPopupWindow) {
+    var objChildWindow = goroam.controls.popup_window('<%= Constant::get(:root_url) %>/' + this.getAttribute(goroam.google.maps.__lat_attr) + '/' + this.getAttribute(goroam.google.maps.__lng_attr) + '?layout=min&find=' + goroam.dhtml.get_element_data(this).value, 482, 620, strMapId, false, true);
+    objChildWindow.focus();
+  } else {
+    goroam.controls.popup_map(new google.maps.LatLng(this.getAttribute(goroam.google.maps.__lat_attr), this.getAttribute(goroam.google.maps.__lng_attr)));
+  }
+  return false;
+}
+
+
+
+/********************************
+ * FUNCTION:	unload
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.01.25
+ * DESCRIPTION:	This function does any necessary cleanup when the user leaves the page.
+ * PARAMETERS:	none
+ * RETURNS:		  none
+ */
+goroam.google.maps.unload = function() {
+  google.maps.Unload();
+}
+

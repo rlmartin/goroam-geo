@@ -1,0 +1,24 @@
+<div class='lat_lng_page'>
+  <h1 lat='<%= @geo_point.lat_s %>' lng='<%= @geo_point.lng_s %>'>(<%= @geo_point.lat_s %>, <%= @geo_point.lng_s %>)</h1>
+  <% if defined? @within %><h2><%= Constant::get(:geo_point_radius_subhead_intro_text) %><%= @within %> <%= DistLib.units_text(@units) %></h2><% end %>
+  <ul class='gr_item_list'>
+    <% if defined? @main_item %>
+    <li class='found_item'><% if @main_item == nil %><span class='alert'><%= Constant::get(:item_not_found_text) %></span>
+    <% else %><%= render :partial => 'items/item', :locals => { :item => @main_item } %>
+    <% end -%></li>
+    <% end -%>
+    <% if @items.empty? %>
+    <% else %>
+    <li class='additional_item_header'><%= Constant::get(:additional_item_header_text) %></li>
+    <% if defined? @items_geo_point %>
+    <%= render(:partial => 'items/list_item', :collection => @items, :locals => { :geo_point => @items_geo_point }).chomp %>
+    <% else %>
+    <%= render(:partial => 'items/list_item', :collection => @items).chomp %>
+    <% end %>
+    <% end %>
+    <li class='additional_item'><input type='checkbox' onclick='if (this.checked) { goroam.google.maps.get_map().show_layer(this.value); } else { goroam.google.maps.get_map().hide_layer(this.value) }' value='com.panoramio.popular' /> <%= Constant::get(:panoramio_on_map_prompt) %></li>
+    <li class='additional_item'><input type='checkbox' onclick='if (this.checked) { goroam.google.maps.get_map().show_layer(this.value); } else { goroam.google.maps.get_map().hide_layer(this.value) }' value='<%= Constant::get(:wikipedia_glayer_id) %>' /> <%= Constant::get(:wikipedia_on_map_prompt) %></li>
+  </ul>
+  <%= render :partial => 'geo_points/change_radius', :locals => { :geo_point => @geo_point, :dist => @within, :units => @units } %>
+  <div id='map'></div>
+</div>

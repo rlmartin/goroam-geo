@@ -1,0 +1,137 @@
+/********************************
+ * FUNCTION:	event functions
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.01
+ * DESCRIPTION:	These functions help in event management.  The goroam.event namespace provides a layer of abstraction in
+ *              case the event management should move off of the Google GEvent object.
+ */
+goroam.event.addListener = function() {
+  google.maps.Event.addListener.apply(arguments[0], arguments);
+}
+goroam.event.addDomListener = function() {
+  google.maps.Event.addDomListener.apply(arguments[0], arguments);
+}
+goroam.event.bind = function() {
+  google.maps.Event.bind.apply(arguments[0], arguments);
+}
+goroam.event.bindDom = function() {
+  google.maps.Event.bindDom.apply(arguments[0], arguments);
+}
+goroam.event.trigger = function() {
+  google.maps.Event.trigger.apply(arguments[0], arguments);
+}
+
+
+
+/********************************
+ * FUNCTION:	arguments_to_array
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.02
+ * DESCRIPTION:	The [Function].arguments array is an array but seems to be read-only (can't
+ *		call push or pop or anything on it).  This I needed this function to convert
+ *		that array into a real array that I can manipulate.
+ * PARAMETERS:	args    Array.  Pass 'arguments' into this function to translate it into a normal array.
+ * RETURNS:	array		The [Function].arguments array as a real array.
+ */
+goroam.system.arguments_to_array = function(args) {
+  var arrResult = [];
+  for (var i = 0; i < args.length; i++) arrResult[i] = args[i];
+  return arrResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	is_numeric
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2006.11.11
+ * DESCRIPTION:	This function tests to see if a variable is a number.
+ * PARAMETERS:	obj		The variable to test.
+ * RETURNS:	Boolean		True if the variable is a number; False if not.
+ */
+goroam.system.is_numeric = function(obj) {
+	return (!isNaN(obj));
+}
+
+
+
+/********************************
+ * FUNCTION:	set_default
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2006.09.19
+ * DESCRIPTION:	This function returns either the value, or the default if the value is undefined/null.
+ * PARAMETERS:	objVal		The value.
+ *		objDefault	The default, if value is undefined/null
+ * RETURNS:	variant		The value or the default.
+ */
+goroam.system.set_default = function(objVal, objDefault) {
+  return ((objVal == undefined) || (objVal == null)) ? objDefault : objVal;
+}
+
+
+
+/********************************
+ * FUNCTION:	is_array
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2006.09.20
+ * DESCRIPTION:	This function tests to see if a variable is an array.
+ * BROWSERS:	IE		Good
+ *		Firefox		Good
+ *		Opera		Good
+ *		Netscape	Good
+ * PARAMETERS:	obj		The variable to test.
+ * RETURNS:	Boolean		True if the variable is an array; False if not.
+ */
+goroam.system.is_array = function(obj) {
+	var bolResult = false;
+	try {
+		if (obj.constructor == Array) bolResult = true;
+	} catch (e) {}
+	return bolResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	is_object
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2006.09.20
+ * DESCRIPTION:	This function tests to see if a variable is an object.
+ * PARAMETERS:	obj		The variable to test.
+ * RETURNS:	Boolean		True if the variable is an object; False if not.
+ */
+goroam.system.is_object = function(obj) {
+	if ((typeof obj == 'object') && (!goroam.system.is_array(obj)))
+		return true;
+	else
+		return false;
+}
+
+
+
+/********************************
+ * FUNCTION:	object_to_string
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.01.29
+ * DESCRIPTION:	This function translates an object into a string.
+ * PARAMETERS:	obj		        The object to examine.
+ *              strParentName The name of the parent object.
+ * RETURNS:	    string        The object, as a string.
+ */
+goroam.system.object_to_string = function(obj, str) {
+  var strResult = '';
+  str = (str || '');
+  if (goroam.system.is_object(obj)) {
+    for (var strName in obj) {
+      strResult += goroam.system.object_to_string(obj[strName], str + ((str == '') ? '' : '.') + strName);
+    }
+  } else if (goroam.system.is_array(obj)) {
+    for (var i = 0; i < obj.length; i++) {
+      strResult += goroam.system.object_to_string(obj[i], str + ((str == '') ? '' : '[' + i + ']'));
+    }
+  } else {
+    strResult = str + '=' + obj + '\n';
+  }
+  return strResult;
+}
+
