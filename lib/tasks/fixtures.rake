@@ -2,7 +2,7 @@ namespace :db do
 	namespace :fixtures do
 		desc 'Create YAML fixtures from Constants data.'
 		task :dump_constants => :environment do
-			File.open("#{RAILS_ROOT}/test/fixtures/constants.yml", 'w') do |file|
+			File.open("#{RAILS_ROOT}/db/fixtures/constants.yml", 'w') do |file|
 				#constants = Constant.find(:all)
 				constants = ActiveRecord::Base.connection.select_all("SELECT * FROM constants")
 				i = "000"

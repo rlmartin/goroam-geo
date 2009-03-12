@@ -86,3 +86,19 @@ namespace :deploy do
 		end
 	end
 end
+
+task :import_constants do
+	require 'active_record/fixtures'
+	Dir.glob("#{deploy_to}/db/fixtures/*.yml").each do |file|
+		Fixtures.create_fixtures('db/fixtures', File.basename(file, '.*'))
+	end
+end
+
+task :export_constants do
+  `rake db:fixtures:dump_constants`
+end
+
+
+before "deploy:migrate", :export_constants
+after "deploy:migrate", :import_constants
+
