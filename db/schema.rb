@@ -27,10 +27,10 @@ ActiveRecord::Schema.define(:version => 20090302130534) do
     t.string   "server_type", :default => ""
     t.string   "lang",        :default => ""
     t.string   "cast_as",     :default => ""
+    t.boolean  "array",       :default => false
     t.boolean  "active",      :default => true
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "array",       :default => false, :null => false
   end
 
   add_index "constants", ["active"], :name => "index_constants_on_active"
