@@ -1,1 +1,760 @@
-
+--- 
+constants_010: 
+  server_type: ""
+  name: data_type_unknown
+  created_at: 2009-01-25 14:48:32
+  updated_at: 2009-01-25 14:48:32
+  array: "0"
+  id: "10"
+  value: "1"
+  cast_as: int
+  lang: ""
+  active: "1"
+constants_008: 
+  server_type: ""
+  name: app_name
+  created_at: 2009-01-25 14:41:34
+  updated_at: 2009-01-25 14:41:34
+  array: "0"
+  id: "8"
+  value: GoRoam
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_031: 
+  server_type: ""
+  name: search_page_find_within_text
+  created_at: 2009-02-03 04:01:20
+  updated_at: 2009-02-03 04:01:20
+  array: "0"
+  id: "32"
+  value: "Find geotagged items within "
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_029: 
+  server_type: ""
+  name: search_submit_button_text
+  created_at: 2009-02-03 03:58:05
+  updated_at: 2009-02-03 03:58:05
+  array: "0"
+  id: "30"
+  value: Search
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_052: 
+  server_type: ""
+  name: powered_by_text
+  created_at: 2009-02-28 13:52:40
+  updated_at: 2009-02-28 13:52:40
+  array: "0"
+  id: "55"
+  value: "Powered by: "
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_009: 
+  server_type: ""
+  name: current_version
+  created_at: 2009-01-25 14:47:08
+  updated_at: 2009-01-25 14:47:08
+  array: "0"
+  id: "9"
+  value: "0.1"
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_032: 
+  server_type: ""
+  name: error_invalid_distance
+  created_at: 2009-02-03 13:48:20
+  updated_at: 2009-02-03 13:48:20
+  array: "0"
+  id: "33"
+  value: The distance must be a number.
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_053: 
+  server_type: ""
+  name: search_page_header
+  created_at: 2009-03-02 12:44:07
+  updated_at: 2009-03-02 12:44:07
+  array: "0"
+  id: "56"
+  value: Find the latitude and longitude of your item
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_011: 
+  server_type: ""
+  name: default_item_display_limit
+  created_at: 2009-01-25 15:00:44
+  updated_at: 2009-01-25 15:00:44
+  array: "0"
+  id: "11"
+  value: "15"
+  cast_as: int
+  lang: ""
+  active: "1"
+constants_054: 
+  server_type: ""
+  name: search_page_description
+  created_at: 2009-03-02 12:57:33
+  updated_at: 2009-03-02 12:57:33
+  array: "0"
+  id: "57"
+  value: Find the latitude and longitude of your item using the map below.  You can either use the search box to find a named location, or you can simply drag the pushpin to the location you want.  Find the results in the boxes on the right and cut-and-paste the code into your web page.
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_012: 
+  server_type: ""
+  name: error_invalid_api
+  created_at: 2009-01-25 15:10:43
+  updated_at: 2009-01-25 15:10:43
+  array: "0"
+  id: "12"
+  value: Invalid API Requested
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_033: 
+  server_type: ""
+  name: change_radius_prompt_text
+  created_at: 2009-02-04 04:44:05
+  updated_at: 2009-02-04 04:44:05
+  array: "0"
+  id: "34"
+  value: "Search around this point for  "
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_013: 
+  server_type: ""
+  name: error_header
+  created_at: 2009-01-25 15:11:41
+  updated_at: 2009-01-25 15:11:41
+  array: "0"
+  id: "13"
+  value: "GoRoam Error: "
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_034: 
+  server_type: ""
+  name: xdcomm_ignore_hosts
+  created_at: 2009-02-16 14:02:45
+  updated_at: 2009-02-16 14:02:45
+  array: "0"
+  id: "37"
+  value: geo.goro.am, localhost:3000, 192.168.1.2:3000
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_055: 
+  server_type: ""
+  name: latitude_text
+  created_at: 2009-03-02 13:09:46
+  updated_at: 2009-03-02 13:09:46
+  array: "0"
+  id: "58"
+  value: latitude
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_014: 
+  server_type: ""
+  name: default_map_id
+  created_at: 2009-01-25 17:49:39
+  updated_at: 2009-01-25 17:49:39
+  array: "0"
+  id: "14"
+  value: map
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_035: 
+  server_type: ""
+  name: data_type_url
+  created_at: 2009-02-16 23:06:21
+  updated_at: 2009-02-16 23:06:21
+  array: "0"
+  id: "38"
+  value: "3"
+  cast_as: int
+  lang: ""
+  active: "1"
+constants_056: 
+  server_type: ""
+  name: longitude_text
+  created_at: 2009-03-02 13:09:58
+  updated_at: 2009-03-02 13:09:58
+  array: "0"
+  id: "59"
+  value: longitude
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_015: 
+  server_type: ""
+  name: default_lat
+  created_at: 2009-01-25 23:46:30
+  updated_at: 2009-01-25 23:46:30
+  array: "0"
+  id: "15"
+  value: "39"
+  cast_as: float
+  lang: ""
+  active: "1"
+constants_036: 
+  server_type: ""
+  name: focus_overlay_interval
+  created_at: 2009-02-18 12:07:04
+  updated_at: 2009-02-18 12:07:04
+  array: "0"
+  id: "39"
+  value: "500"
+  cast_as: int
+  lang: ""
+  active: "1"
+constants_057: 
+  server_type: ""
+  name: code_text
+  created_at: 2009-03-02 13:10:08
+  updated_at: 2009-03-02 13:10:08
+  array: "0"
+  id: "60"
+  value: code
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_016: 
+  server_type: ""
+  name: default_lng
+  created_at: 2009-01-25 23:46:39
+  updated_at: 2009-01-25 23:46:39
+  array: "0"
+  id: "16"
+  value: "-98"
+  cast_as: float
+  lang: ""
+  active: "1"
+constants_037: 
+  server_type: ""
+  name: show_on_map_prompt_text
+  created_at: 2009-02-18 13:06:13
+  updated_at: 2009-02-18 13:06:13
+  array: "0"
+  id: "40"
+  value: Show on map
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_060: 
+  server_type: ""
+  name: item_text
+  created_at: 2009-03-02 13:41:20
+  updated_at: 2009-03-02 13:41:20
+  array: "0"
+  id: "63"
+  value: item
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_058: 
+  server_type: ""
+  name: keywords_search_page
+  created_at: 2009-03-02 13:37:27
+  updated_at: 2009-03-02 13:37:27
+  array: "0"
+  id: "61"
+  value: find search code generate
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_017: 
+  server_type: ""
+  name: default_zoom
+  created_at: 2009-01-25 23:48:54
+  updated_at: 2009-01-25 23:48:54
+  array: "0"
+  id: "17"
+  value: "4"
+  cast_as: int
+  lang: ""
+  active: "1"
+constants_040: 
+  server_type: ""
+  name: lng_attribute
+  created_at: 2009-02-20 13:21:21
+  updated_at: 2009-02-20 13:21:21
+  array: "0"
+  id: "43"
+  value: lng
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_038: 
+  server_type: ""
+  name: exit_hover_timeout
+  created_at: 2009-02-18 13:21:57
+  updated_at: 2009-02-18 13:21:57
+  array: "0"
+  id: "41"
+  value: "200"
+  cast_as: int
+  lang: ""
+  active: "1"
+constants_061: 
+  server_type: ""
+  name: title_text
+  created_at: 2009-03-02 13:41:29
+  updated_at: 2009-03-02 13:41:29
+  array: "0"
+  id: "64"
+  value: title
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_059: 
+  server_type: ""
+  name: description_search_page
+  created_at: 2009-03-02 13:38:21
+  updated_at: 2009-03-02 13:38:21
+  array: "0"
+  id: "62"
+  value: Use this tool to find a geographic location and generate the code to geomap items on your web page.
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_039: 
+  server_type: ""
+  name: lat_attribute
+  created_at: 2009-02-20 13:21:16
+  updated_at: 2009-02-20 13:21:16
+  array: "0"
+  id: "42"
+  value: lat
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_062: 
+  server_type: ""
+  name: generate_lat_lng_html_prompt
+  created_at: 2009-03-02 13:47:00
+  updated_at: 2009-03-02 13:47:00
+  array: "0"
+  id: "65"
+  value: Enter your item and title below to generate the full HTML.
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_020: 
+  server_type: ""
+  name: location_not_found
+  created_at: 2009-01-26 13:52:49
+  updated_at: 2009-01-26 13:52:49
+  array: "0"
+  id: "21"
+  value: Sorry, the location was not found.
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_018: 
+  server_type: ""
+  name: default_zoom_found
+  created_at: 2009-01-25 23:49:03
+  updated_at: 2009-01-25 23:49:03
+  array: "0"
+  id: "18"
+  value: "8"
+  cast_as: int
+  lang: ""
+  active: "1"
+constants_041: 
+  server_type: ""
+  name: map_attribute
+  created_at: 2009-02-20 13:21:30
+  updated_at: 2009-02-20 13:21:30
+  array: "0"
+  id: "44"
+  value: map
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_021: 
+  server_type: dev
+  name: root_url
+  created_at: 2009-01-27 13:59:13
+  updated_at: 2009-01-27 13:59:13
+  array: "0"
+  id: "22"
+  value: http://192.168.1.2:3000
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_019: 
+  server_type: ""
+  name: css_prefix
+  created_at: 2009-01-26 04:15:31
+  updated_at: 2009-01-26 04:15:31
+  array: "0"
+  id: "19"
+  value: gr_
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_042: 
+  server_type: ""
+  name: header_subheader_text
+  created_at: 2009-02-25 13:04:48
+  updated_at: 2009-02-25 13:04:48
+  array: "0"
+  id: "45"
+  value: "Geomapper: A tool to easily geomap your website"
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_063: 
+  server_type: ""
+  name: generate_submit_button_text
+  created_at: 2009-03-02 13:57:23
+  updated_at: 2009-03-02 13:57:23
+  array: "0"
+  id: "66"
+  value: Generate
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_043: 
+  server_type: ""
+  name: google_analytics_key
+  created_at: 2009-02-25 13:33:44
+  updated_at: 2009-02-25 13:33:44
+  array: "0"
+  id: "46"
+  value: UA-3390059-3
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_064: 
+  server_type: ""
+  name: url_text
+  created_at: 2009-03-03 12:11:35
+  updated_at: 2009-03-03 12:11:35
+  array: "0"
+  id: "67"
+  value: URL
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_001: 
+  server_type: ""
+  name: server_type
+  created_at: 2009-01-23 13:32:05
+  updated_at: 2009-01-23 13:32:05
+  array: "0"
+  id: "1"
+  value: dev
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_022: 
+  server_type: prod
+  name: root_url
+  created_at: 2009-01-27 13:59:36
+  updated_at: 2009-01-27 13:59:36
+  array: "0"
+  id: "23"
+  value: http://geo.goro.am
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_065: 
+  server_type: ""
+  name: image_text
+  created_at: 2009-03-03 12:12:43
+  updated_at: 2009-03-03 12:12:43
+  array: "0"
+  id: "68"
+  value: Image
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_002: 
+  server_type: ""
+  name: server_type
+  created_at: 2009-01-23 13:32:05
+  updated_at: 2009-01-23 13:32:05
+  array: "0"
+  id: "2"
+  value: prod
+  cast_as: ""
+  lang: ""
+  active: "0"
+constants_023: 
+  server_type: ""
+  name: address_for_geo_point_not_found
+  created_at: 2009-01-30 04:17:02
+  updated_at: 2009-01-30 04:17:02
+  array: "0"
+  id: "24"
+  value: Address not found.
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_044: 
+  server_type: prod
+  name: google_analytics_key
+  created_at: 2009-02-25 13:34:23
+  updated_at: 2009-02-25 13:34:23
+  array: "0"
+  id: "47"
+  value: UA-3390059-4
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_003: 
+  server_type: ""
+  name: server_type
+  created_at: 2009-01-23 13:32:05
+  updated_at: 2009-01-23 13:32:05
+  array: "0"
+  id: "3"
+  value: test
+  cast_as: ""
+  lang: ""
+  active: "0"
+constants_024: 
+  server_type: ""
+  name: title_search_page
+  created_at: 2009-02-03 03:44:11
+  updated_at: 2009-02-03 03:44:11
+  array: "0"
+  id: "25"
+  value: Search for a Geo Point
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_045: 
+  server_type: ""
+  name: wikipedia_glayer_id
+  created_at: 2009-02-25 13:54:48
+  updated_at: 2009-02-25 13:54:48
+  array: "0"
+  id: "48"
+  value: org.wikipedia.en
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_066: 
+  server_type: ""
+  name: general_text_text
+  created_at: 2009-03-03 12:14:11
+  updated_at: 2009-03-03 12:14:11
+  array: "0"
+  id: "69"
+  value: General Text
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_067: 
+  server_type: ""
+  name: search_page_type_prompt
+  created_at: 2009-03-03 12:24:27
+  updated_at: 2009-03-03 12:24:27
+  array: "0"
+  id: "70"
+  value: This is
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_004: 
+  server_type: ""
+  name: lat_lng_precision
+  created_at: 2009-01-23 13:35:38
+  updated_at: 2009-01-23 13:35:38
+  array: "0"
+  id: "4"
+  value: "17"
+  cast_as: int
+  lang: ""
+  active: "1"
+constants_025: 
+  server_type: ""
+  name: search_page_goto_link_text
+  created_at: 2009-02-03 03:47:10
+  updated_at: 2009-02-03 03:47:10
+  array: "0"
+  id: "26"
+  value: Go to this geo point
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_046: 
+  server_type: ""
+  name: geo_point_radius_subhead_intro_text
+  created_at: 2009-02-26 11:58:33
+  updated_at: 2009-02-26 11:58:33
+  array: "0"
+  id: "49"
+  value: "within "
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_068: 
+  server_type: ""
+  name: default_popup_map_zoom
+  created_at: 2009-03-04 11:57:10
+  updated_at: 2009-03-04 11:57:10
+  array: "0"
+  id: "71"
+  value: "16"
+  cast_as: int
+  lang: ""
+  active: "1"
+constants_005: 
+  server_type: ""
+  name: error_browser_not_supported
+  created_at: 2009-01-23 13:36:44
+  updated_at: 2009-01-23 13:36:44
+  array: "0"
+  id: "5"
+  value: Sorry, your browser is not supported
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_026: 
+  server_type: ""
+  name: add_geotag_link_text
+  created_at: 2009-02-03 03:48:49
+  updated_at: 2009-02-03 03:48:49
+  array: "0"
+  id: "27"
+  value: Geotag something at this geo point
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_047: 
+  server_type: ""
+  name: item_not_found_text
+  created_at: 2009-02-26 12:33:34
+  updated_at: 2009-02-26 12:33:34
+  array: "0"
+  id: "50"
+  value: Sorry, we could not locate your request.
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_069: 
+  server_type: ""
+  name: close_text
+  created_at: 2009-03-04 12:04:59
+  updated_at: 2009-03-04 12:04:59
+  array: "0"
+  id: "72"
+  value: Close
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_006: 
+  server_type: ""
+  name: error_browser_not_supported
+  created_at: 2009-01-23 13:37:05
+  updated_at: 2009-01-23 13:37:05
+  array: "0"
+  id: "6"
+  value: Lo siento, browser not supported
+  cast_as: ""
+  lang: esp
+  active: "1"
+constants_027: 
+  server_type: ""
+  name: miles_text
+  created_at: 2009-02-03 03:52:29
+  updated_at: 2009-02-03 03:52:29
+  array: "0"
+  id: "28"
+  value: miles
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_050: 
+  server_type: ""
+  name: wikipedia_on_map_prompt
+  created_at: 2009-02-26 13:36:17
+  updated_at: 2009-02-26 13:36:17
+  array: "0"
+  id: "53"
+  value: Show Wikipedia Articles
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_048: 
+  server_type: ""
+  name: additional_item_header_text
+  created_at: 2009-02-26 12:39:52
+  updated_at: 2009-02-26 12:39:52
+  array: "0"
+  id: "51"
+  value: "Items tagged in this location:"
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_028: 
+  server_type: ""
+  name: kilometers_text
+  created_at: 2009-02-03 03:52:43
+  updated_at: 2009-02-03 03:52:43
+  array: "0"
+  id: "29"
+  value: kilometers
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_051: 
+  server_type: ""
+  name: rss_item_description
+  created_at: 2009-02-28 12:05:24
+  updated_at: 2009-02-28 12:05:24
+  array: "0"
+  id: "54"
+  value: "%s found at %s, %.2f %s from source"
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_049: 
+  server_type: ""
+  name: panoramio_on_map_prompt
+  created_at: 2009-02-26 13:35:54
+  updated_at: 2009-02-26 13:35:54
+  array: "0"
+  id: "52"
+  value: Show Pamoramio Images
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_007: 
+  server_type: test
+  name: error_browser_not_supported
+  created_at: 2009-01-23 13:37:31
+  updated_at: 2009-01-23 13:37:31
+  array: "0"
+  id: "7"
+  value: Lo siento, browser not supported
+  cast_as: ""
+  lang: fra
+  active: "1"
+constants_030: 
+  server_type: ""
+  name: go_submit_button_text
+  created_at: 2009-02-03 03:58:13
+  updated_at: 2009-02-03 03:58:13
+  array: "0"
+  id: "31"
+  value: Go
+  cast_as: ""
+  lang: ""
+  active: "1"
