@@ -26,17 +26,23 @@ class Constant < ActiveRecord::Base
   # a cache on the object, so that the constants are loaded only once - when the object is first used.
   def self.cache_constants
     # Get the configured server type (dev, prod, or test)
-    server_type = find(:first, :conditions => { :active => true, :name => "server_type" })
-    if server_type == nil
-      server_type = ""
-    else
-      server_type = server_type.value
-    end
-    const_set("SERVER_TYPE", server_type.downcase)
-    const_set("CONST_STALE", {})
-    # Load the constants into the hashes for each language
-    find(:all, :conditions => ["(server_type = :server_type OR server_type = '') AND active AND NOT name = ''", { :server_type => self::SERVER_TYPE }]).each do | const |
-      load_const(const)
+		begin
+		  server_type = find(:first, :conditions => { :active => true, :name => "server_type" })
+		  if server_type == nil
+		    server_type = ""
+		  else
+		    server_type = server_type.value
+		  end
+		  const_set("SERVER_TYPE", server_type.downcase)
+		  const_set("CONST_STALE", {})
+		  # Load the constants into the hashes for each language
+		  find(:all, :conditions => ["(server_type = :server_type OR server_type = '') AND active AND NOT name = ''", { :server_type => self::SERVER_TYPE }]).each do | const |
+		    load_const(const)
+			end
+		rescue
+			const_set("CONST_LIST", {})
+		  const_set("SERVER_TYPE", "")
+		  const_set("CONST_STALE", {})
     end
   end
 
@@ -70,10 +76,13 @@ class Constant < ActiveRecord::Base
   end
 
   def self.refresh!(const_name)
-    const_name = StringLib.to_sym(const_name)
-    find(:all, :conditions => ["(server_type = :server_type OR server_type = '') AND active AND name = :const_name", { :server_type => self::SERVER_TYPE, :const_name => const_name.to_s }]).each do | const |
-      load_const(const)
-    end
-    if self::CONST_STALE[const_name] == nil: self::CONST_STALE[const_name] = false end
+		begin
+		  const_name = StringLib.to_sym(const_name)
+		  find(:all, :conditions => ["(server_type = :server_type OR server_type = '') AND active AND name = :const_name", { :server_type => self::SERVER_TYPE, :const_name => const_name.to_s }]).each do | const |
+		    load_const(const)
+		  end
+		  if self::CONST_STALE[const_name] == nil: self::CONST_STALE[const_name] = false end
+		rescue
+		end
   end
 end

@@ -1,4 +1,5 @@
 set :application, "geo.goro.am"
+set :launch_ip, "174.129.235.147"
 ssh_options[:keys] = ["/home/ryan/Documents/id-linux-keypair"]
 set :repository, 
 "svn+ssh://svn@goro.am/vol/svn/goro.am/geo/trunk"
@@ -12,7 +13,7 @@ set :deploy_to, "/var/www/#{application}"
 # your SCM below:
 # set :scm, :subversion
 set :scm_username, "svn"
-set :scm_password, "5uBv3r5i0N"
+#set :scm_password, "5uBv3r5i0N"
 set :scm_checkout, "export"
 
 set :user, "root"
@@ -21,9 +22,9 @@ set :use_sudo, false
 set :rails_env, "migration"
 
 # Note that this IP address may change for future deployments.
-role :app, "174.129.235.147"
-role :web, "174.129.235.147"
-role :db,  "174.129.235.147", :primary => true
+role :app, "#{launch_ip}"
+role :web, "#{launch_ip}"
+role :db,  "#{launch_ip}", :primary => true
 
 namespace :deploy do
 	desc "Restart the Mongrel cluster"
@@ -87,18 +88,24 @@ namespace :deploy do
 	end
 end
 
-task :import_constants do
+task :after_migrate do
 	require 'active_record/fixtures'
-	Dir.glob("#{deploy_to}/db/fixtures/*.yml").each do |file|
+	Dir.glob("#{deploy_to}/current/db/fixtures/*.yml").each do |file|
 		Fixtures.create_fixtures('db/fixtures', File.basename(file, '.*'))
 	end
 end
 
-task :export_constants do
+task :before_migrate do
   `rake db:fixtures:dump_constants`
+  `svn commit db/fixtures/constants.yml -m ""`
+  `scp -i ~/Documents/id-linux-keypair root@#{launch_ip}:#{release_path}/db/fixtures db/fixtures/constants.yml`
+end
+
+task :after_symlink, :roles => :app do
+	run "chown -hR root:www-data #{deploy_to}"
 end
 
 
-before "deploy:migrate", :export_constants
-after "deploy:migrate", :import_constants
+#before "deploy:migrate", :export_constants
+#after "deploy:migrate", :import_constants
 
