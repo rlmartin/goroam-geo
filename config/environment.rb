@@ -100,7 +100,14 @@ GeoKit::Geocoders::yahoo = 'ei4bbm3V34GyNJpqUEGiaZlO7NYIGWwiD1QCgx.ZMoITcWHgRzfS
 # See http://www.google.com/apis/maps/signup.html
 # and http://www.google.com/apis/maps/documentation/#Geocoding_Examples
 # 192.168.1.2
-GeoKit::Geocoders::google = 'ABQIAAAA_4OXpyNyrl-JywtBe7TRFhR0gukDrxmFlvklHIK1bcbbmdW00RQbiL3NSN3-H3uwmFgl3mYWG0KJ0Q'
+google_maps_api_key = case RAILS_ENV
+	when 'test' then "ABQIAAAA_4OXpyNyrl-JywtBe7TRFhR0gukDrxmFlvklHIK1bcbbmdW00RQbiL3NSN3-H3uwmFgl3mYWG0KJ0Q" 
+	when 'development' then "ABQIAAAA_4OXpyNyrl-JywtBe7TRFhR0gukDrxmFlvklHIK1bcbbmdW00RQbiL3NSN3-H3uwmFgl3mYWG0KJ0Q" 
+	when 'migration' then "ABQIAAAA_4OXpyNyrl-JywtBe7TRFhQRuICOiR1ivws7T11qO7zgwl4ldRTR_3sYTHBnzkTWSsIUOL0OrDx4EQ" 
+	when 'production' then "ABQIAAAA_4OXpyNyrl-JywtBe7TRFhQRuICOiR1ivws7T11qO7zgwl4ldRTR_3sYTHBnzkTWSsIUOL0OrDx4EQ"
+	else "ABQIAAAA_4OXpyNyrl-JywtBe7TRFhR0gukDrxmFlvklHIK1bcbbmdW00RQbiL3NSN3-H3uwmFgl3mYWG0KJ0Q"
+end
+GeoKit::Geocoders::google = google_maps_api_key
 # localhost
 #GeoKit::Geocoders::google = 'ABQIAAAAZJi-l472pG4Ix-1F-wh23hT2yXp_ZAY8_ufC3CFXhHIE1NvwkxRsTrLHLcF4tDmmVl0jnB0qZ5Vkrw'
     

@@ -1,4 +1,5 @@
 set :application, "geo.goro.am"
+# Note that this IP address may change for future deployments.
 set :launch_ip, "174.129.235.147"
 ssh_options[:keys] = ["/home/ryan/Documents/id-linux-keypair"]
 set :repository, 
@@ -13,7 +14,6 @@ set :deploy_to, "/var/www/#{application}"
 # your SCM below:
 # set :scm, :subversion
 set :scm_username, "svn"
-#set :scm_password, "5uBv3r5i0N"
 set :scm_checkout, "export"
 
 set :user, "root"
@@ -21,7 +21,6 @@ default_run_options[:pty] = true
 set :use_sudo, false
 set :rails_env, "migration"
 
-# Note that this IP address may change for future deployments.
 role :app, "#{launch_ip}"
 role :web, "#{launch_ip}"
 role :db,  "#{launch_ip}", :primary => true
@@ -89,10 +88,14 @@ namespace :deploy do
 end
 
 task :after_migrate do
-	require 'active_record/fixtures'
-	Dir.glob("#{deploy_to}/current/db/fixtures/*.yml").each do |file|
-		Fixtures.create_fixtures('db/fixtures', File.basename(file, '.*'))
-	end
+	run "cd #{deploy_to}/current; rake db:fixtures:load FIXTURES_PATH=db/fixtures RAILS_ENV=migration"
+	set :db_pass, Capistrano::CLI.password_prompt("MySQL Password:")
+	run 'mysql -e "UPDATE constants SET active = 0 WHERE name = \'server_type\'" -u goroam_iusr -h localhost -p -D goroam_geo' do |ch, stream, out|
+     ch.send_data "#{db_pass}\n" if out=~ /^Enter password:/
+  end
+	run 'mysql -e "UPDATE constants SET active = 1 WHERE name = \'server_type\' AND value = \'prod\'" -u goroam_iusr -h localhost -p -D goroam_geo' do |ch, stream, out|
+     ch.send_data "#{db_pass}\n" if out=~ /^Enter password:/
+  end
 end
 
 task :before_migrate do
@@ -104,8 +107,4 @@ end
 task :after_symlink, :roles => :app do
 	run "chown -hR root:www-data #{deploy_to}"
 end
-
-
-#before "deploy:migrate", :export_constants
-#after "deploy:migrate", :import_constants
 
