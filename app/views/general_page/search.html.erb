@@ -39,9 +39,14 @@
 google.setOnLoadCallback(function() {
   var objMap = goroam.google.maps.get_map();
   objMap.create_active_marker(undefined, true);
+	objMap.disableDoubleClickZoom();
+	google.maps.Event.addListener(objMap, 'dblclick', function(objOverlay, objLatLng) {
+		this.recenter_active_marker(objLatLng);
+		goroam.event.trigger(this, 'location_found', this.active_marker.getLatLng());
+	});
   goroam.event.bind(objMap, 'location_found', document.getElementById('lat'), function(objLatLng) { this.value = objLatLng.lat(); });
   goroam.event.bind(objMap, 'location_found', document.getElementById('lng'), function(objLatLng) { this.value = objLatLng.lng(); });
-  goroam.event.bind(objMap, 'location_found', document.getElementById('code'), function(objLatLng) { this.value = 'lat="' + objLatLng.lat() + ' lng="' + objLatLng.lng() + '"'; });
+  goroam.event.bind(objMap, 'location_found', document.getElementById('code'), function(objLatLng) { this.value = 'lat="' + objLatLng.lat() + '" lng="' + objLatLng.lng() + '"'; });
   //goroam.event.bind(objMap, 'location_found', document.getElementById('goto_link'), function(objLatLng) { this.href = '<%= Constant::get(:root_url) %>/' + objLatLng.lat() + '/' + objLatLng.lng(); this.style.display = 'inline'; });
   //goroam.event.bind(objMap, 'location_found', document.getElementById('add_tag_link'), function(objLatLng) { this.href = '<%= Constant::get(:root_url) %>/' + objLatLng.lat() + '/' + objLatLng.lng() + '/new'; this.style.display = 'inline'; });
   //goroam.event.bind(objMap, 'location_found', document.getElementById('change_radius_form'), function(objLatLng) { this.action = '<%= Constant::get(:root_url) %>/' + objLatLng.lat() + '/' + objLatLng.lng(); });

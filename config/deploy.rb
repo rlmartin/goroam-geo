@@ -1,6 +1,6 @@
 set :application, "geo.goro.am"
 # Note that this IP address may change for future deployments.
-set :launch_ip, "174.129.235.147"
+set :launch_ip, "goro.am" #"174.129.235.147"
 ssh_options[:keys] = ["/home/ryan/Documents/id-linux-keypair"]
 set :repository, 
 "svn+ssh://svn@goro.am/vol/svn/goro.am/geo/trunk"
@@ -85,6 +85,13 @@ namespace :deploy do
 			puts "Nginx appears to be off already."
 		end
 	end
+end
+
+task :before_deploy do
+  `rake sitemap:generate`
+  `svn commit public/sitemap.xml -m ""`
+  `svn commit public/sitemap/static.xml -m ""`
+#  `scp -i ~/Documents/id-linux-keypair root@#{launch_ip}:#{release_path}/db/fixtures db/fixtures/constants.yml`
 end
 
 task :after_migrate do

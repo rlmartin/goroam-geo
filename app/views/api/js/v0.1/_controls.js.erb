@@ -72,8 +72,10 @@ goroam.controls.create_popup_wrapper = function() {
   if (elBody && elBody.scrollHeight) {
     // I had to do this here because I was having difficulty getting it to work from CSS.
     // This works correctly in FF, IE, Chrome, and Safari. The width doesn't work correctly in Opera.
-    goroam.controls.__popup_obscurer.style.height = elBody.scrollHeight + 'px';
-    goroam.controls.__popup_obscurer.style.width = elBody.scrollWidth + 'px';
+		var iHeight = Math.max(elBody.scrollHeight, elBody.clientHeight);
+		var iWidth = Math.max(elBody.scrollWidth, elBody.clientWidth);
+	  goroam.controls.__popup_obscurer.style.height = iHeight + 'px';
+  	goroam.controls.__popup_obscurer.style.width = iWidth + 'px';
     goroam.controls.__popup_div.style.top = ((window.pageYOffset || elBody.scrollTop || document.documentElement.scrollTop) + 10) + 'px';
   }
   goroam.controls.__popup_container.style.display = 'block';
@@ -117,7 +119,7 @@ goroam.controls.popup_map = function(objLatLng, iZoom) {
   goroam.dhtml.edit_class_name(goroam.controls.__popup_div, 'popup_map');
   goroam.controls.__popup_text.appendChild(goroam.controls.__popup_map);
   var objMap = goroam.google.maps.get_map(goroam.controls.__popup_map_id);
-  objMap.recenter_active_marker(objLatLng, (iZoom || <%= Constant::get(:default_popup_map_zoom) %>));
+  objMap.recenter_active_marker(objLatLng, (iZoom || parseInt('<%= Constant::get(:default_popup_map_zoom) %>')));
   objMap.checkResize();
 }
 

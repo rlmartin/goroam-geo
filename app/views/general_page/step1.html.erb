@@ -1,0 +1,35 @@
+<% @page[:title] = "Add Maps to Your Page : Step 1 - Get the Code" %>
+<h2>Add Maps to Your Page: Step 1 - Get the Code</h2>
+<p>
+	First, you need to get a free API key from Google Maps here: <a href='http://code.google.com/apis/maps/signup.html' target='_blank'>http://code.google.com/apis/maps/signup.html</a>.  You only need to do this once for each entire website you own.  Go there or use the window below:
+</p>
+<p class='center'>
+	<iframe src='http://code.google.com/apis/maps/signup.html' width='850px' height='250px'></iframe>
+</p>
+<p>
+	Scroll to the bottom and enter the name of the server where you have your web page.  The server name is only the part between the "http://" and the next "/".  For example:
+	<ul>
+		<li>For "<span class='highlight_color'>http://</span><span class='medium_color'>geo.goro.am</span><span class='highlight_color'>/</span>example", you would use: geo.goro.am</li>
+		<li>For "<span class='highlight_color'>http://</span><span class='medium_color'>goroam.wordpress.com</span><span class='highlight_color'>/</span>wp-admin/post.php", you would use: goroam.wordpress.com</li>
+	</ul>
+	(Sometimes it can be slightly more complicated than this; for more information see our <a href='http://help.goro.am/tutorials/google-maps-server-name'>Google Maps Server Name tutorial</a>.)
+</p>
+<p>
+	Click the checkbox to accept the terms and conditions and click the "Generate API key" button.  On the next screen, you will see your key.  Save this somewhere for future reference.
+</p>
+<p>
+	Copy the code below and paste it anywhere into the <strong>HTML code</strong> of your page.  If you are using a platform where you see formatting buttons and no HTML code, you will need to switch to edit the HTML directly.  Be sure to replace the "your key here" text with the key you generated from Google above.<br /><br />
+	code:<br />
+	<textarea style='font-size: 0.8em; width:800px;' onclick='this.select();'>&lt;script src="http://www.google.com/jsapi?key=your key here" type="text/javascript"&gt;&lt;/script&gt;
+&lt;script src="http://geo.goro.am/api.js" type="text/javascript"&gt;&lt;/script&gt;</textarea>
+</p>
+<p>
+	Great, you're done with Step 1 - time to move on to <a href='/step2'>Step 2</a>.
+</p>
+<p>
+	See also: how to do <a href='http://help.goro.am/tutorials/step-1' target='_blank'>step 1 on popular sites</a>.
+</p>
+<div class='center'>
+	<a href='/howto'>Previous</a> : <a href='/step2'>Next</a><br /><br />
+	<a href='/howto'>Start</a> : <span class='disabled_link'>Step 1</span> : <a href='/step2'>Step 2</a> : <a href='/step3'>Step 3</a>
+</div>

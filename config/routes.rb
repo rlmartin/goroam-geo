@@ -80,6 +80,8 @@ ActionController::Routing::Routes.draw do |map|
 
   # Routes to static pages.
   map.connect 'search', :controller => "general_page", :action => "search"
+  map.connect 'howto', :controller => "general_page", :action => "howto"
+  map.connect ':action', :controller => "general_page", :requirements => { :action => /step[123]/ }
 
   # This catches all unrecognized urls and shows an error page.  Maybe there's some other way of doing this
   # with RoR settings or something, but this works for now.

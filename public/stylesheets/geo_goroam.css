@@ -14,6 +14,10 @@ A {
 	cursor: pointer;
 	font-weight: bold;
 }
+.disabled_link {
+	color: #254;
+	font-weight: bold;
+}
 A:link, A:visited {
 	color: #254;
 	font-weight: bold;
@@ -31,13 +35,19 @@ FORM {
 	margin: 0px;
 }
 h1, h2, h3, h4, h5 {
+	color: #254;
   margin: 0px;
+	padding: 0px;
 }
 INPUT, TEXTAREA
 {
 	color: #254;
 	font-family: Trebuchet MS, Arial, sans serif, sans;
 	font-weight: bold;
+}
+code {
+	display: block;
+	margin: 30px;
 }
 .text_box
 {
@@ -46,6 +56,7 @@ INPUT, TEXTAREA
 .page {
 	margin: 0 auto;
 }
+.center { text-align: center; }
 
 /* General formatting */
 .dark_color,
@@ -56,6 +67,9 @@ A:hover.dark_color
 {
 	color: #254;
 }
+img.dark_color {
+	border: 1px solid #254;
+}
 .medium_color,
 A.medium_color,
 A:link.medium_color,
@@ -63,6 +77,9 @@ A:visited.medium_color,
 A:hover.medium_color
 {
 	color: #8c8;
+}
+img.medium_color {
+	border: 1px solid #8c8;
 }
 .highlight_color,
 A.highlight_color,
@@ -74,6 +91,9 @@ A.alert
 {
 	color: #f60;
 }
+img.highlight_color {
+	border: 1px solid #f60;
+}
 .light_color,
 A.light_color,
 A:link.light_color,
@@ -81,6 +101,9 @@ A:visited.light_color,
 A:hover.light_color
 {
 	color: #cfb;
+}
+img.light_color {
+	border: 1px solid #cfb;
 }
 
 /* Header menu */
@@ -213,6 +236,23 @@ ul.gr_item_list li.additional_item_header {
   border-top-width: 0px;
   font-style: italic;
   margin-top: 15px;
+}
+
+/* Box Layouts */
+ol.steps, ul.steps {
+	margin: 0px;	
+	padding: 0px;
+}
+.steps li {
+	display: block;
+	float: left;
+	margin: 20px;
+	text-align: center;
+	width: 250px;
+}
+.steps li img {
+	border: 1px solid #254;
+	width: 200px;
 }
 
 /* Search page layout */

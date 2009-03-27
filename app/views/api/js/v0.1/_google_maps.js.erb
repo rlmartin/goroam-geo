@@ -104,6 +104,12 @@ goroam.google.maps.extend_functionality = function() {
       this.resize_to_bounds(objZoom);
     }
   }
+	// A function to turn on recentering of the active marker when the given event is triggered.
+	google.maps.Map2.prototype.recenter_active_marker_on_event = function(strEvent) {
+		strEvent = strEvent.toLowerCase();
+		if (strEvent == 'dblclick') this.disableDoubleClickZoom();
+		google.maps.Event.addListener(this, strEvent, function(objOverlay, objLatLng) { this.recenter_active_marker(objLatLng); });
+	}
   
   // This function resizes and recenters the map based on either a) the optional bounds object or b) the map's
   // internal bounds object.  Returns true upon success.
@@ -265,9 +271,9 @@ goroam.google.maps.create_focus_overlay = function(objLatLng) {
           goroam.dhtml.edit_class_name(_self.get_container(), '', 'focus_overlay_stage3');
           _self.__redraw(bolForce);
           _self.map.removeOverlay(_self);
-        }, <%= Constant::get(:focus_overlay_interval) %>);
-      }, <%= Constant::get(:focus_overlay_interval) %>);
-    }, <%= Constant::get(:focus_overlay_interval) %>);
+        }, parseInt('<%= Constant::get(:focus_overlay_interval) %>'));
+      }, parseInt('<%= Constant::get(:focus_overlay_interval) %>'));
+    }, parseInt('<%= Constant::get(:focus_overlay_interval) %>'));
   }
   return objResult;
 }
@@ -534,13 +540,13 @@ goroam.google.maps.load_from_page = function() {
       // Add event triggers to highlight the element when hovering over the map marker.
       goroam.event.bind(objLatLng, 'mouseover', arrLatLngElements[i], goroam.dhtml.highlight);
       goroam.event.bind(objLatLng, 'mouseout', arrLatLngElements[i], goroam.dhtml.unhighlight);
-      // Add a map prompt to the element.
-      goroam.google.maps.add_map_prompt(arrLatLngElements[i]);
-      // Send the element data back to the GoRoam server.
-      goroam.xdcomm.send_element(arrLatLngElements[i]);
       // Resize and recenter the maps based on the loaded lat/lng points.
       objMap.resize_to_bounds();
     }
+    // Add a map prompt to the element.
+    goroam.google.maps.add_map_prompt(arrLatLngElements[i]);
+    // Send the element data back to the GoRoam server.
+    goroam.xdcomm.send_element(arrLatLngElements[i]);
   }
 }
 
@@ -563,26 +569,29 @@ goroam.google.maps.load_map_from_settings = function(strId) {
     elAnchor.name = strId;
     elContainer.insertBefore(elAnchor, elContainer.firstChild);
     var objMap = new google.maps.Map2(elContainer);
-    objMap.setCenter(new google.maps.LatLng(<%= @settings[:lat] %>, <%= @settings[:lng] %>), <%= @settings[:zoom] %>);
+    objMap.setCenter(new google.maps.LatLng('<%= @settings[:lat] %>', '<%= @settings[:lng] %>'), parseInt('<%= @settings[:zoom] %>'));
     // Add map controls (zooming, map types, etc.)
     try {
-      <%  case @settings[:controls]
-            when :all %>
-      objMap.addControl(new GLargeMapControl());
-      objMap.addControl(new GMapTypeControl());
-      objMap.addControl(new GOverviewMapControl());
-      objMap.addControl(new GScaleControl());
-      <%    when :all_small %>
-      objMap.addControl(new GSmallMapControl());
-      objMap.addControl(new GMenuMapTypeControl());
-      objMap.addControl(new GOverviewMapControl());
-      objMap.addControl(new GScaleControl());
-      <%    when :min %>
-      objMap.addControl(new GMenuMapTypeControl());
-      objMap.addControl(new GSmallZoomControl());
-      <%    when :none
-            else
-          end %>
+			switch ('<%= @settings[:controls] %>') {
+				case 'all':
+				  objMap.addControl(new GLargeMapControl());
+				  objMap.addControl(new GMapTypeControl());
+				  objMap.addControl(new GOverviewMapControl());
+				  objMap.addControl(new GScaleControl());
+					break;
+      	case 'all_small':
+				  objMap.addControl(new GSmallMapControl());
+				  objMap.addControl(new GMenuMapTypeControl());
+				  objMap.addControl(new GOverviewMapControl());
+				  objMap.addControl(new GScaleControl());
+					break;
+      	case 'min':
+				  objMap.addControl(new GMenuMapTypeControl());
+				  objMap.addControl(new GSmallZoomControl());
+					break;
+      	case 'none':
+					break;
+			}
     } catch (e) {
       objMap.addControl(new GSmallMapControl());
       objMap.addControl(new GMapTypeControl());
@@ -665,7 +674,7 @@ goroam.google.maps.over_map_element = function() {
 }
 goroam.google.maps.leave_map_element = function() {
   var self = this;
-  window.setTimeout(function() { if (!self.__mouseover && !self.__map_prompt.__mouseover) goroam.dhtml.edit_class_name(self.__map_prompt, '', 'map_prompt_hover_element'); }, <%= Constant::get(:exit_hover_timeout) %>);
+  window.setTimeout(function() { if (!self.__mouseover && !self.__map_prompt.__mouseover) goroam.dhtml.edit_class_name(self.__map_prompt, '', 'map_prompt_hover_element'); }, parseInt('<%= Constant::get(:exit_hover_timeout) %>'));
 }
 
 
@@ -679,22 +688,26 @@ goroam.google.maps.leave_map_element = function() {
  * PARAMETERS:	none
  * RETURNS:		  none
  */
-goroam.google.maps.show_on_map = function() {
-  var bolPopup = <%= @settings[:popup] == nil ? 'false' : 'true' %>;
-  var bolPopupWindow = <%= @settings[:popup_window] == nil ? 'false' : 'true' %>;
+goroam.google.maps.show_on_map = function(e) {
+  var bolResult = false;
+  var bolPopup = ('<%= @settings[:popup] == nil ? "false" : "true" %>' == 'true' ? true : false);
+  var bolPopupWindow = ('<%= @settings[:popup_window] == nil ? "false" : "true" %>' == 'true' ? true : false);
   var strMapId = (this.getAttribute(goroam.google.maps.__map_attr) || goroam.google.maps.__active_map_id);
   var objMap = goroam.google.maps.get_map(strMapId);
   if (objMap && !(bolPopup || bolPopupWindow)) {
     var objLatLng = new google.maps.LatLng(this.getAttribute(goroam.google.maps.__lat_attr), this.getAttribute(goroam.google.maps.__lng_attr));
     objMap.setCenter(objLatLng);
     objMap.show_focus(objLatLng);
+    bolResult = true;
   } else if (bolPopupWindow) {
+    goroam.dhtml.cancel_bubble(e);
     var objChildWindow = goroam.controls.popup_window('<%= Constant::get(:root_url) %>/' + this.getAttribute(goroam.google.maps.__lat_attr) + '/' + this.getAttribute(goroam.google.maps.__lng_attr) + '?layout=min&find=' + goroam.dhtml.get_element_data(this).value, 482, 620, strMapId, false, true);
     objChildWindow.focus();
   } else {
     goroam.controls.popup_map(new google.maps.LatLng(this.getAttribute(goroam.google.maps.__lat_attr), this.getAttribute(goroam.google.maps.__lng_attr)));
+    goroam.dhtml.cancel_bubble(e);
   }
-  return false;
+  return bolResult;
 }
 
 

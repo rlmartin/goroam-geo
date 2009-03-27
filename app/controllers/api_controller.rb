@@ -42,7 +42,9 @@ class ApiController < ApplicationController
   def before_filter_load_default_settings
     if StringLib.empty?(@settings[:map]): @settings[:map] = Constant::get(:default_map_id) end
     if StringLib.empty?(@settings[:lat])
-      cur_loc = IpGeocoder.geocode(request.remote_ip)
+			# This is mapping incorrectly, so I'm commenting it out for now.
+      #cur_loc = IpGeocoder.geocode(request.remote_ip)
+			cur_loc = nil
       if (cur_loc == nil) or (cur_loc.lat == nil)
         @settings[:lat] = Constant::get(:default_lat)
         @settings[:lng] = Constant::get(:default_lng)
