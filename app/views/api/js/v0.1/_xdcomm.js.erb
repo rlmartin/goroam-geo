@@ -10,7 +10,7 @@
  */
 goroam.xdcomm.check_host = function(strHost) {
   var bolResult = true;
-  strHost = strHost.toLowerCase();
+  strHost = strHost.toLowerCase().right_of('://').left_of('/');
   var arrIgnoreHosts = '<%= Constant::get(:xdcomm_ignore_hosts) %>'.toLowerCase().split(',');
   for (var i = 0; i < arrIgnoreHosts.length; i++) {
     if (strHost == arrIgnoreHosts[i].trim()) {
@@ -105,9 +105,11 @@ goroam.xdcomm.process = function() {
     var strHash = strUrl.substring(iHash + 1);
     if (strHash != '') {
       // Check the signature.
-      var bolValid = false;
+			// This doesn't work (this page does not have permission to view parent.location.host) and it's
+			// probably too paranoid for now anyway, so I'm removing it.
+      //var bolValid = false;
       var strData = '', strSig = '', strSubDir = '';
-      if (strHash.in_str('&sig=')) {
+      //if (strHash.in_str('&sig=')) {
         strSig = strHash.right_of_rev('&sig=');
         strData = strHash.left_of_rev('&sig=');
         if (strData.in_str('&subdir=')) {
@@ -115,17 +117,18 @@ goroam.xdcomm.process = function() {
           strData = strData.left_of_rev('&subdir=');
         }
         strData = decodeURIComponent(strData);
-        bolValid = (decodeURIComponent(strSig) === (strData + objParent.location.host.toLowerCase()).md5());
-      }
+        //bolValid = (decodeURIComponent(strSig) === (strData + objParent.location.host.toLowerCase()).md5());
+      //}
       // If the signature is valid, send to the server.
-      if (bolValid && goroam.xdcomm.check_host(objParent.location.host)) {
+      //if (bolValid && goroam.xdcomm.check_host(objParent.location.host)) {
+      //if (goroam.xdcomm.check_host(objParent.location.host)) {
         var objHttp = new goroam.http.request();
         var strUrl = '<%= Constant::get(:root_url) %>' + strSubDir;
         //objHttp.return_func = function(bol, str) { alert(str); };
         objHttp.open('post', strUrl, true);
         objHttp.set_request_header('Content-Type', 'text/xml');
         objHttp.send(strData);
-      }
+      //}
     }
   }
 }
@@ -160,7 +163,7 @@ goroam.xdcomm.send = function(strData, strSubDir) {
  * RETURNS:	None
  */
 goroam.xdcomm.send_element = function(elElement) {
-  if (goroam.xdcomm.should_send(window.location.host)) {
+  if (goroam.xdcomm.should_send(window.location.host, goroam.dhtml.get_element_data(elElement))) {
     goroam.xdcomm.send(goroam.xdcomm.get_element_data(elElement), '/' + elElement.getAttribute('lat') + '/' + elElement.getAttribute('lng') + '.xml');
   }
 }
