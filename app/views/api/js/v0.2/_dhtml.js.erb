@@ -1,0 +1,396 @@
+/********************************
+ * FUNCTION:	append_to_body
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.03.03
+ * DESCRIPTION:	This function appends the given HTML element to the body element of the page.
+ * PARAMETERS:	elElement The HTML element to append to the BODY element.
+ * RETURNS:	    none
+ */
+goroam.dhtml.append_to_body = function(elElement) {
+  if (elElement) {
+    var elBody = goroam.dhtml.get_body();
+    if (elBody) elBody.appendChild(elElement);
+  }
+}
+
+
+
+/********************************
+ * FUNCTION:	cancel_bubble
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2006.02.20
+ * DESCRIPTION:	This function cancels the event bubbling for the given event.
+ * PARAMETERS:	evEvent	The event object to cancel the bubbing.
+ * RETURNS:	None
+ */
+goroam.dhtml.cancel_bubble = function(evEvent) {
+	evEvent = goroam.dhtml.get_event(evEvent);
+  // For Internet Explorer
+  if (evEvent && evEvent.cancelBubble) evEvent.cancelBubble = true;
+  // For Mozilla
+  if (evEvent && evEvent.stopPropagation) evEvent.stopPropagation();
+  if (evEvent && evEvent.preventDefault) evEvent.preventDefault();
+}
+
+
+
+/********************************
+ * FUNCTION:	edit_class_name
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.18
+ * DESCRIPTION:	This function changes the class name on a given HTML element to include strAdd and removes strRemove.
+ * PARAMETERS:	elElement   Optional. The HTML element to highlight.  Defaults to the calling object.
+ *              strAdd      Optional. The class string to add to the existing class string.
+ *              strRemove   Optional. The class string to remove from the existing class string.
+ *              bolNoPrefix  Optional. False to use the GoRoam CSS prefix; True to use only the given string.
+ * RETURNS:	none
+ */
+goroam.dhtml.edit_class_name = function(elElement, strAdd, strRemove, bolNoPrefix) {
+  elElement = (elElement || this);
+  strAdd = (strAdd || '');
+  strRemove = (strRemove || '');
+  if (!bolNoPrefix) {
+    if (strAdd != '') strAdd = goroam.string.add_prefix_to_all_words(strAdd, '<%= Constant::get(:css_prefix) %>');
+    if (strRemove != '') strRemove = goroam.string.add_prefix_to_all_words(strRemove, '<%= Constant::get(:css_prefix) %>');
+  }
+	if (!elElement.className) elElement.className = '';
+  elElement.className = elElement.className.add_value(strAdd, strRemove, false, false);
+}
+
+
+
+/********************************
+ * FUNCTION:	highlight, unhighlight
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.01.25
+ * DESCRIPTION:	This function adds a highlight/unhighlight class to the given HTML element.  The actual highlighting
+ *              effects should be set in the CSS.
+ * PARAMETERS:	None    Highlighting is done on the calling object.
+ * RETURNS:	none
+ */
+goroam.dhtml.highlight = function() {
+  goroam.dhtml.edit_class_name(this, 'highlight');
+}
+goroam.dhtml.unhighlight = function() {
+  goroam.dhtml.edit_class_name(this, '', 'highlight');
+}
+
+
+
+/********************************
+ * FUNCTION:	get_body
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2007.10.20
+ * DESCRIPTION:	This function gets the body element of the page.
+ * PARAMETERS:	none
+ * RETURNS:	HTML Element	The BODY element
+ */
+goroam.dhtml.get_body = function() {
+	var elResult;
+	elResult = document.body;
+	if (!elResult) elResult = document.getElementsByTagName("body")[0];
+	return elResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	get_element_data
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.16
+ * DESCRIPTION:	This function examines the given HTML element and produces the data to send to the GeoGoRoam server.
+ * PARAMETERS:	elElement   The HTML element to examine.
+ * RETURNS:	    object      A title, text content (value), and data type parsed from the element.  See GoRoam's data_types
+ *                          table for the mapping of data_type ids to what they mean.
+ */
+goroam.dhtml.get_element_data = function(elElement) {
+  var objResult = {data_type: 0, value: null, title: null};
+  if (elElement) {
+    switch (elElement.tagName.toLowerCase()) {
+      case 'a':
+        objResult.data_type = 3;
+        objResult.value = elElement.href;
+        objResult.title = goroam.dhtml.get_inner_text(elElement);
+        break;
+      case 'img':
+        objResult.data_type = 4;
+        objResult.value = elElement.src;
+        objResult.title = elElement.getAttribute('alt');
+        if (!objResult.title) objResult.title = elElement.getAttribute('title');
+        break;
+      case 'input':
+        switch (elElement.getAttribute('type').toLowerCase()) {
+          case 'image':
+            objResult.data_type = 4;
+            objResult.value = elElement.src;
+            objResult.title = elElement.getAttribute('title');
+            break;
+          default:
+            objResult.data_type = 2;
+            objResult.value = elElement.value;
+            objResult.title = elElement.getAttribute('title');
+        }
+        break;
+      case 'b':
+      case 'body':
+      case 'div':
+      case 'em':
+      case 'h1':
+      case 'h2':
+      case 'h3':
+      case 'h4':
+      case 'h5':
+      case 'h6':
+      case 'h7':
+      case 'i':
+      case 'li':
+      case 'p':
+      case 'span':
+      case 'strong':
+      case 'td':
+      case 'u':
+        objResult.data_type = 2;
+        objResult.value = goroam.dhtml.get_inner_html(elElement);
+        objResult.title = elElement.getAttribute('title');
+        break;
+      case 'textarea':
+        objResult.data_type = 2;
+        objResult.value = elElement.value;
+        objResult.title = elElement.getAttribute('title');
+        break;
+      default:
+        objResult.data_type = 1;
+        objResult.value = goroam.dhtml.outer_html(elElement);
+        objResult.title = elElement.getAttribute('title');
+    }
+  }
+  return objResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	get_elements_in_class
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2008.05.13
+ * DESCRIPTION:	This function gets all elements that have the given class set.
+ * PARAMETERS:	strClassName	The class to look for.
+ *				      elNode			  Optional.  The HTML element to look in.  Defaults to BODY.
+ *              bolNoPrefix   Optional. True to ignore the GoRoam class prefix; False to use it.  Defaults to false.
+ * RETURNS:		  array			    The list of found HTML elements.
+ */
+goroam.dhtml.get_elements_in_class = function(strClassName, elNode, bolNoPrefix) {
+	var arrResult = [];
+  strClassName = (strClassName || '');
+  if (strClassName != '') {
+    var strClassAttr = (goroam.browser.host_info().name == goroam.enm.browsers.ie ? 'className' : 'class');
+	  var arrElements = goroam.dhtml.get_elements_with_attribute(strClassAttr, elNode);
+    var arrClassName = [];
+    if (arrElements.length > 0) {
+      if (!bolNoPrefix) strClassName = goroam.string.add_prefix_to_all_words(strClassName, '<%= Constant::get(:css_prefix) %>');
+      arrClassName = strClassName.compress_whitespace().split(' ');
+      for (var i = 0; i < arrClassName.length; i++) arrClassName[i] = RegExp('\\b' + arrClassName[i] + '\\b', 'i');
+    }
+	  for (var i = 0; i < arrElements.length; i++) {
+		  var strValue = (arrElements[i].getAttribute(strClassAttr) || '');
+      for (var j = 0; j < arrClassName.length; j++) {
+		    if (strValue.search(arrClassName[j]) >= 0) {
+          arrResult.push(arrElements[i]);
+          break;
+        }
+      }
+	  }
+  }
+	return arrResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	get_elements_with_attribute
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2008.05.13
+ * DESCRIPTION:	This function gets all elements that have the given attribute set
+ *				to something other than an empty string.
+ * BROWSERS:	IE		Good
+ *		Firefox		Good
+ *		Opera		Good
+ *		Netscape	Good
+ * PARAMETERS:	strAttribute	The attribute to look for.  Case-sensitive.  Can be comma-delimited list.
+ *				elNode			Optional.  The HTML element to look in.  Defaults to BODY.
+ * RETURNS:		array			The list of found HTML elements.
+ */
+goroam.dhtml.get_elements_with_attribute = function(strAttribute, elNode) {
+	if (!elNode) elNode = document.getElementsByTagName("body")[0];
+	var arrResult = [];
+  strAttribute = strAttribute.toLowerCase();
+	var arrAttributes = strAttribute.split_trim(',');
+	var arrElements = elNode.getElementsByTagName("*");
+	for (var i = 0; i < arrElements.length; i++) {
+		for (var j = 0; j < arrAttributes.length; j++) {
+			var strValue = (arrElements[i].getAttribute(arrAttributes[j]) || '')
+			if ((strValue != null) && (strValue != '')) {
+				arrResult.push(arrElements[i]);
+				break;
+			}
+		}
+	}
+	return arrResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	get_inner_html
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.24
+ * DESCRIPTION:	This function gets the innerHTML of the given element, ignoring content added by GoRoam.
+ * PARAMETERS:	elElement   The HTML element to examine.
+ * RETURNS:	    string      The innerHTML of the element, without additional GoRoam elements.
+ */
+goroam.dhtml.get_inner_html = function(elElement) {
+  var strResult = '';
+  if (elElement) {
+    var elNode = elElement.cloneNode(true);
+    var arrRemove = goroam.dhtml.get_elements_in_class('map_prompt', elNode);
+    for (var i = 0; i < arrRemove.length; i++) arrRemove[i].parentNode.removeChild(arrRemove[i]);
+    strResult = elNode.innerHTML;
+  }
+  return strResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	get_inner_text
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.24
+ * DESCRIPTION:	This function gets the inner text of the given element, based on browser.
+ * PARAMETERS:	elElement   The HTML element to examine.
+ * RETURNS:	    string      The inner text of the element, without HTML markup.
+ */
+goroam.dhtml.get_inner_text = function(elElement) {
+  var strResult = '';
+  if (elElement) {
+    if (elElement.innerText) {
+      strResult = elElement.innerText;
+    } else if (elElement.textContent) {
+      strResult = elElement.textContent;
+    }
+  }
+  return strResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	get_event
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2006.02.20
+ * DESCRIPTION:	This function gets the event, based on how the browser passes the event.
+ * PARAMETERS:	Event Object	The calling event.
+ * RETURNS:	Event Object	The calling event.
+ */
+goroam.dhtml.get_event = function(evEvent) {
+	var evResult = evEvent ? evEvent : window.event;
+	return evResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	get_select_value
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.03.02
+ * DESCRIPTION:	This function gets the value of the given select box.
+ * PARAMETERS:	elSelect	The select box in question.
+ * RETURNS:	    string	  The selected value.
+ */
+goroam.dhtml.get_select_value = function(elSelect) {
+  return elSelect.options[elSelect.selectedIndex].value;
+}
+
+
+
+/********************************
+ * FUNCTION:	is_in_class
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2008.10.16
+ * DESCRIPTION:	This function tells whether or not the given element is in the given class.
+ * PARAMETERS:	elElement			The HTML element to examine.
+ *              strClassName	The class to look for.
+ *				      bolNoPrefix   Optional. True to ignore the GoRoam class prefix; False to use it.  Defaults to false.
+ * RETURNS:		  boolean			  True is the class matches; false if not.
+ */
+goroam.dhtml.is_in_class = function(elElement, strClassName, bolNoPrefix) {
+	var bolResult = false;
+  strClassName = (strClassName || '');
+  var strClassAttr = (goroam.browser.host_info().name == goroam.enm.browsers.ie ? 'className' : 'class');
+	var strElementClass = (elElement.getAttribute(strClassAttr) || '');
+  if ((strClassName != '') && (strElementClass != '')) {
+    if (!bolNoPrefix) strClassName = goroam.string.add_prefix_to_all_words(strClassName, '<%= Constant::get(:css_prefix) %>');
+    var arrClassName = strClassName.compress_whitespace().split(' ');
+    for (var i = 0; i < arrClassName.length; i++) {
+	    if (strElementClass.search(RegExp('\\b' + arrClassName[i] + '\\b', 'i')) >= 0) {
+        bolResult = true;
+        break;
+      }
+    }
+	}
+	return bolResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	set_mouseover, unset_mouseover
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.18
+ * DESCRIPTION:	This function adds a mouseover class to the given HTML element.  The actual
+ *              effects should be set in the CSS.  The 'mouseover' class can optionally be overridden by
+ *              setting the '__mouseover_class_name' property of the calling HTML element.
+ * PARAMETERS:	elElement   Optional. The HTML element to highlight.  Defaults to the calling object.
+ * RETURNS:	none
+ */
+goroam.dhtml.set_mouseover = function() {
+  var strClassName = (this.__mouseover_class_name || 'mouseover');
+  var strOutClassName = (this.__mouseout_class_name || '');
+  goroam.dhtml.edit_class_name(this, strClassName, strOutClassName);
+  this.__mouseover = true;
+}
+goroam.dhtml.unset_mouseover = function() {
+  var strClassName = (this.__mouseover_class_name || 'mouseover');
+  var strOutClassName = (this.__mouseout_class_name || '');
+  goroam.dhtml.edit_class_name(this, strOutClassName, strClassName);
+  this.__mouseover = false;
+}
+
+
+
+/********************************
+ * FUNCTION:	outer_html
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.16
+ * DESCRIPTION:	This function gets the html code of the entire element.
+ * PARAMETERS:	elElement   The HTML element for which to grab the HTML.
+ * RETURNS:	none
+ */
+goroam.dhtml.outer_html = function(elElement) {
+  var strResult = '';
+  if (elElement) {
+    if (elElement.outerHTML) {
+      strResult = elElement.outerHTML;
+    } else {
+      var elTempDiv = document.getElementById('gr_outer_html');
+      if (!elTempDiv) {
+        elTempDiv = document.createElement('gr_outer_html');
+        elTempDiv.style.display = 'none';
+        elTempDiv.appendChild(elElement.cloneNode(true));
+        strResult = elTempDiv.innerHTML;
+        elTempDiv.innerHTML = '';
+      }
+    }
+  }
+  return strResult;
+}
+

@@ -1,0 +1,176 @@
+/********************************
+ * OBJECT:	request
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2006.04.29
+ * DESCRIPTION:	This object loads an XMLHttpRequest object, to use when requesting from or
+ *		posting to a URL.  It loads the object based on the browser settings and
+ *		also adds a timeout feature.
+ * PARAMETERS:	None
+ * RETURNS:	The xml_http object
+ */
+goroam.http.request = function() {
+  // Save a reference to the object for later, to prevent confusion with the event 'this' object.
+	var self = this;
+  // The main XMLHttpRequest object, loaded differently based on browser.
+	var objHttp;
+  // Attempt to load the object, and keep track of the success of the loading.
+	var bolIsLoaded = load_object();
+	var bolIsAsync = false;
+  // A flag to show whether or not the Http requested has finished.
+	this.finished = false;
+  // The default timeout setting.
+	this.timeout = 60;
+  // The timeout id returned by window.setTimeout, when the Http request is caled asynchronously.
+	this.timeout_id = undefined;
+  // The function to call when the URL completes loading.
+	this.return_func = undefined;
+
+	// Public properties - I couldn't figure out how to expose the XMLHttpRequest object's properties,
+  // so I created these get and set methods.
+	this.get = function(strProperty) {
+		return objHttp[strProperty];
+	};
+	this.set = function(strProperty, strValue) {
+		return objHttp[strProperty] = strValue;
+	};
+
+	// Public functions - exposing the objects existing functions.  I only allow calling these
+  // functions if the XMLHttpRequest object loaded properly
+	this.abort = function() {
+		if (bolIsLoaded) return objHttp.abort();
+	};
+	this.get_all_response_headers = function() {
+		if (bolIsLoaded)
+			return objHttp.getAllResponseHeaders();
+		else
+			return '';
+	};
+	this.get_response_header = function(str) {
+		if (bolIsLoaded)
+			return objHttp.getResponseHeader(str);
+		else
+			return '';
+	};
+	this.open = function(strMethod, strURL, bolAsync, strUsername, strPassword) {
+		if (bolIsLoaded) {
+			bolIsAsync = bolAsync;
+			return objHttp.open(strMethod, strURL, bolAsync, strUsername, strPassword);
+		}
+	};
+	this.send = function(str) {
+		// The timeout logic here only matters for asynchronous URL calls.
+		if (bolIsLoaded) {
+			var strTemp = (str || '');
+			if (bolIsAsync) {
+				self.finished = false;
+				// If the return function needs to be called or the timeout should be detected, call the goroam.http.check
+        // function when the ready state changes.  In this case, pass in the Http object so it doesn't rely upon the
+        // window.TimeoutObject (which will not be set if there is no timeout set.
+				if ((self.return_func != undefined) || (self.timeout > 0)) {
+					objHttp.onreadystatechange = function() {
+						return goroam.http.check(self, false);
+					};
+				}
+				// If the timeout is set, set up a call to goroam.http.check when the timeout expires.  If the URL call
+        // completes before the timeout, the timeout gets canceled; if the URL doesn't complete before the timeout,
+        // it will abort the URL call and then cancel the timeout.
+				if (self.timeout > 0) {
+					// Get a reference to the goroam.http.check function, but feed it the parameters ahead of time so it can
+          // be called without them later.
+					var fTimeout = goroam.http.check_later(self, true);
+					self.timeout_id = window.setTimeout(fTimeout, 1000 * self.timeout);
+					objHttp.send(str);
+					// Kill the function reference to help with garbage collection in IE.
+					fTimeout = null;
+				} else {
+					objHttp.send(str);
+				}
+			} else {
+				objHttp.send(str);
+			}
+		} else {
+			// If not properly loaded, call the return function as a failure.
+			if (self.return_func != undefined) self.return_func(false, '');
+		}
+	};
+	this.set_request_header = function(strLabel, strValue) {
+		if (bolIsLoaded) return objHttp.setRequestHeader(strLabel, strValue);
+	};
+
+
+
+	function load_object(url) {
+		var bolResult = false;
+		// branch for native XMLHttpRequest object
+		if(window.XMLHttpRequest) {
+			try {
+				objHttp = new XMLHttpRequest();
+				bolResult = true;
+			} catch(e) {}
+		// branch for IE/Windows ActiveX version
+		} else if(window.ActiveXObject) {
+			try {
+				objHttp = new ActiveXObject("Msxml2.XMLHTTP");
+				bolResult = true;
+			} catch(e) {
+				try {
+					objHttp = new ActiveXObject("Microsoft.XMLHTTP");
+					bolResult = true;
+				} catch(e) {}
+			}
+		}
+		return bolResult;
+	}
+}
+
+
+
+/********************************
+ * FUNCTION:	check
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2006.04.29
+ * DESCRIPTION:	This object checks the completion of a URL call through the http request object.
+ *		It looks for successful completion or a timeout, calls the return_func function,
+ *		and cleans up all timeout settings.  This function goes with the http request
+ *		object defined above.
+ * PARAMETERS:	objHttp		The http request object to reference.
+ *		bolFromTimeout	true if the function is called from a timeout event, false if not.
+ * RETURNS:	None
+ */
+goroam.http.check = function(objHttp, bolFromTimeout) {
+	var bolResult = false;
+	var strResponseText = '';
+	if (objHttp != undefined) {
+		if (!objHttp.finished) {
+			if (objHttp.get('readyState') == 4) {
+				if (objHttp.get('status') == 200) {
+					// Only successful if the readyState = 4 and the status = 200.
+					bolResult = true;
+				}
+			}
+			if (bolFromTimeout || bolResult) {
+				objHttp.finished = true;
+				// Only get the resonseText if successful (otherwise there's an error).
+				if (bolResult) strResponseText = objHttp.get('responseText');
+				// Call the return_func function if one has been specified.
+				if (objHttp.return_func != undefined) objHttp.return_func(bolResult, strResponseText);
+				// Clean up timeout settings.
+				if (objHttp.timeout_id != undefined) {
+					window.clearTimeout(objHttp.timeout_id);
+				}
+				// Abort the URL call if a timeout and the URL hasn't finished yet.
+				if (!bolResult) objHttp.abort();
+			}
+		}
+	}
+}
+
+
+
+// Use this function to create a reference to the function above, but with the
+// given parameters.  Useful for when calling the function from setTimeout
+goroam.http.check_later = function(obj, bolFromTimeout) {
+	return (function() {
+		goroam.http.check(obj, bolFromTimeout);
+	});
+}

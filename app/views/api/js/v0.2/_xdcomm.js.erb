@@ -1,0 +1,192 @@
+/********************************
+ * FUNCTION:	check_host
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.16
+ * DESCRIPTION:	This function checks the given host against a list of hosts to ignore.  This is mainly used to
+ *              prevent redundant cross-domain sends that come internally from GoRoam pages, though it could also
+ *              be used to block certain hosts.
+ * PARAMETERS:	strHost   The host name to check.
+ * RETURNS:	    boolean   True if the host is ok, false if it should be ignored.
+ */
+goroam.xdcomm.check_host = function(strHost) {
+  var bolResult = true;
+  strHost = strHost.toLowerCase().right_of('://').left_of('/');
+  var arrIgnoreHosts = '<%= Constant::get(:xdcomm_ignore_hosts) %>'.toLowerCase().split(',');
+  for (var i = 0; i < arrIgnoreHosts.length; i++) {
+    if (strHost == arrIgnoreHosts[i].trim()) {
+      bolResult = false;
+      break;
+    }
+  }
+  return bolResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	create_iframe
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.16
+ * DESCRIPTION:	This function creates a hidden iframe that is used to send data in a cross-domain interaction.
+ * PARAMETERS:	strSrc    The url to open in the iframe.
+ * RETURNS:	None
+ */
+goroam.xdcomm.create_iframe = function(strSrc) {
+  var elContainer = goroam.xdcomm.get_hidden_iframe_container();
+  var elIFrame = document.createElement('iframe');
+  if (goroam.browser.host_info().name === goroam.enm.browsers.ie) {
+    elIFrame.src = strSrc;
+    elContainer.appendChild(elIFrame);
+  } else {
+    elContainer.appendChild(elIFrame);
+    elIFrame.src = strSrc;
+  }
+	return elIFrame;
+}
+
+
+
+/********************************
+ * FUNCTION:	get_hidden_iframe_container
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.16
+ * DESCRIPTION:	This function gets/creates the container on the page that holds the hidden iframes used in the
+ *              cross-domain communication.
+ * PARAMETERS:	None
+ * RETURNS:	None
+ */
+goroam.xdcomm.get_hidden_iframe_container = function() {
+  if (!goroam.xdcomm.__container) {
+    goroam.xdcomm.__container = document.createElement('div');
+    goroam.xdcomm.__container.style.display = 'none';
+    document.getElementsByTagName('body')[0].appendChild(goroam.xdcomm.__container);
+  }
+  return goroam.xdcomm.__container;
+}
+
+
+
+/********************************
+ * FUNCTION:	get_element_data
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.16
+ * DESCRIPTION:	This function examines the given HTML element and produces the data to send to the GeoGoRoam server.
+ * PARAMETERS:	elElement   The HTML element to examine.
+ * RETURNS:	    string      The data to submit to the server.
+ */
+goroam.xdcomm.get_element_data = function(elElement) {
+  var strResult = '';
+  if (elElement) {
+    var objData = goroam.dhtml.get_element_data(elElement);
+    var strTitle = (objData.title == null ? '' : objData.title);
+    var strValue = (objData.value == null ? '' : objData.value);
+    strResult = '<item><title><![CDATA[' + strTitle + ']]></title><value><![CDATA[' + strValue + ']]></value><data_type_id>' + objData.data_type + '</data_type_id></item>';
+  }
+  return strResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	process
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.16
+ * DESCRIPTION:	This function processes a cross-domain communication based on the data contained in the hash of the page.
+ * PARAMETERS:	None
+ * RETURNS:	None
+ */
+goroam.xdcomm.process = function() {
+  var objParent = window.parent;
+  // Don't process if the page is not in its own iframe.
+  if (objParent != window) {
+    var strUrl = document.URL;
+    // Get the payload.
+    var iHash = strUrl.indexOf('#');
+    var strHash = strUrl.substring(iHash + 1);
+    if (strHash != '') {
+      // Check the signature.
+			// This doesn't work (this page does not have permission to view parent.location.host) and it's
+			// probably too paranoid for now anyway, so I'm removing it.
+      //var bolValid = false;
+      var strData = '', strSig = '', strSubDir = '';
+      //if (strHash.in_str('&sig=')) {
+        strSig = strHash.right_of_rev('&sig=');
+        strData = strHash.left_of_rev('&sig=');
+        if (strData.in_str('&subdir=')) {
+          strSubDir = strData.right_of_rev('&subdir=');
+          strData = strData.left_of_rev('&subdir=');
+        }
+        strData = decodeURIComponent(strData);
+        //bolValid = (decodeURIComponent(strSig) === (strData + objParent.location.host.toLowerCase()).md5());
+      //}
+      // If the signature is valid, send to the server.
+      //if (bolValid && goroam.xdcomm.check_host(objParent.location.host)) {
+      //if (goroam.xdcomm.check_host(objParent.location.host)) {
+        var objHttp = new goroam.http.request();
+        var strUrl = '<%= Constant::get(:root_url) %>' + strSubDir;
+        //objHttp.return_func = function(bol, str) { alert(str); };
+        objHttp.open('post', strUrl, true);
+        objHttp.set_request_header('Content-Type', 'text/xml');
+        objHttp.send(strData);
+      //}
+    }
+  }
+}
+
+
+
+/********************************
+ * FUNCTION:	send
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.16
+ * DESCRIPTION:	This function sends data to the geo.goro.am server through a cross-domain connection.
+ * PARAMETERS:	strData   The data to send to the server.
+ *              strSubDir Optional.  A sub-directory on the server to send the data to.
+ * RETURNS:	None
+ */
+goroam.xdcomm.send = function(strData, strSubDir) {
+  if (goroam.xdcomm.should_send(window.location.host, strData)) {
+    var strServername = '<%= Constant::get(:root_url) %>/xd.htm';
+    var strSig = (strData + window.location.host.toLowerCase()).md5();
+    goroam.xdcomm.create_iframe(strServername + '#' + encodeURIComponent(strData) + '&subdir=' + (strSubDir || '') + '&sig=' + encodeURIComponent(strSig));
+  }
+}
+
+
+
+/********************************
+ * FUNCTION:	send_element
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.16
+ * DESCRIPTION:	This function sends an HTML element to the geo.goro.am server through a cross-domain connection.
+ * PARAMETERS:	strData   The data to send to the server.
+ * RETURNS:	None
+ */
+goroam.xdcomm.send_element = function(elElement) {
+  if (goroam.xdcomm.should_send(window.location.host, goroam.dhtml.get_element_data(elElement))) {
+    goroam.xdcomm.send(goroam.xdcomm.get_element_data(elElement), '/' + elElement.getAttribute('lat') + '/' + elElement.getAttribute('lng') + '.xml');
+  }
+}
+
+
+
+/********************************
+ * FUNCTION:	should_send
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.16
+ * DESCRIPTION:	This function checks the given host against a list of hosts to ignore.  It also checks the data to see if
+ *              it should be sent (not implemented yet).
+ * PARAMETERS:	strHost   The host name to check.
+ *              stData    The data to check.
+ * RETURNS:	    boolean   True if the host and data are ok, false if they should be ignored.
+ */
+goroam.xdcomm.should_send = function(strHost, strData) {
+  var bolResult = true;
+  strData = (strData || '');
+  if (strData == '') {
+    bolResult = false;
+  } else {
+    bolResult = goroam.xdcomm.check_host(strHost);
+  }
+  return bolResult;
+}

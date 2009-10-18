@@ -1,0 +1,48 @@
+// A function to add an item to an array only if not already in the array.
+Array.prototype.add_if_new = function(obj) {
+	return goroam.array.add_if_new(this, obj);
+};
+// A function to find the index of an item in an array.  Returns -1 if not found.
+Array.prototype.Find = function(val) {
+	return goroam.array.in_array(this, val);
+};
+// A function to remove members of the array that are in both this array and the given
+// array.  This also removes members from the second array.
+Array.prototype.remove_intersection = function(arr) {
+	return goroam.array.remove_intersection(this, arr);
+};
+
+// This function adds a new item to an array only if the item is not already in the
+// array.  Returns true if added, false if not added (already present).
+goroam.array.add_if_new = function(arr, obj) {
+	var bolResult = false;
+	if (goroam.array.in_array(arr, obj) < 0) {
+		arr.push(obj);
+		bolResult = true;
+	}
+	return bolResult;
+}
+// Searches the array for the given value/object.  If not found, returns -1.
+goroam.array.in_array = function(arr, val) {
+	var i, iResult = -1;
+	for (i = 0; i < arr.length; i++) {
+		if (arr[i] == val) break;
+	}
+	// If the item is not found, i will be past the end of the array.
+	if (i != arr.length) iResult = i;
+	return iResult;
+}
+// A function to remove array members that appear in both arrays.
+goroam.array.remove_intersection = function(arr1, arr2) {
+	var arrResult = [];
+	for (var i = arr1.length - 1; i >= 0; i--) {
+		for (var j = 0; j < arr2.length; j++) {
+			if (arr1[i] == arr2[j]) {
+				arr1.splice(i, 1);
+				arrResult.unshift(arr2.splice(j, 1));
+				break;
+			}
+		}
+	}
+	return arrResult;
+}

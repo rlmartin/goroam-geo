@@ -1,0 +1,168 @@
+goroam.controls.__popup_map_id = '<%= Constant::get(:css_prefix) %>popup_map';
+
+
+
+/********************************
+ * FUNCTION:	close_popup
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.03.03
+ * DESCRIPTION:	This function closes the on-screen popup.
+ * PARAMETERS:	none
+ * RETURNS:	    none
+ */
+goroam.controls.close_popup = function() {
+  if (goroam.controls.__popup_container) {
+    goroam.controls.__popup_container.style.display = 'none';
+    goroam.controls.__popup_div.className = '<%= Constant::get(:css_prefix) %>popup_div';
+    while (goroam.controls.__popup_text.childNodes.length > 0) goroam.controls.__popup_text.removeChild(goroam.controls.__popup_text.firstChild);
+  }
+}
+
+
+
+/********************************
+ * FUNCTION:	create_popup_wrapper
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.03.03
+ * DESCRIPTION:	This function creates the wrapper for an on-screen popup, if necessary.  It creates the background
+ *              obscurer and the close button.
+ * PARAMETERS:	none
+ * RETURNS:	    none
+ */
+goroam.controls.create_popup_wrapper = function() {
+  if (!goroam.controls.__popup_container) {
+    var elDiv = document.createElement('div');
+    elDiv.style.height = '100%';
+    elDiv.style.left = '0px';
+    elDiv.style.position = 'absolute';
+    elDiv.style.top = '0px';
+    elDiv.style.width = '100%';
+    elDiv.style.zoom = 1;
+    goroam.dhtml.append_to_body(elDiv);
+    goroam.controls.__popup_container = elDiv;
+  }
+  if (!goroam.controls.__popup_obscurer) {
+    var elDiv = document.createElement('div');
+    elDiv.className = '<%= Constant::get(:css_prefix) %>popup_background';
+    goroam.controls.__popup_container.appendChild(elDiv);
+    goroam.controls.__popup_obscurer = elDiv;
+    goroam.event.bindDom(goroam.controls.__popup_obscurer, 'click', goroam.controls.__popup_obscurer, goroam.controls.close_popup);
+  }
+  if (!goroam.controls.__popup_div) {
+    var elDiv = document.createElement('div');
+    elDiv.className = '<%= Constant::get(:css_prefix) %>popup_div';
+    goroam.controls.__popup_container.appendChild(elDiv);
+    goroam.controls.__popup_div = elDiv;
+  }
+  if (!goroam.controls.__popup_text) {
+    var elDiv = document.createElement('div');
+    elDiv.className = '<%= Constant::get(:css_prefix) %>popup_text';
+    goroam.controls.__popup_div.appendChild(elDiv);
+    goroam.controls.__popup_text = elDiv;
+  }
+  if (!goroam.controls.__popup_close_button) {
+    var elClose = document.createElement('div');
+    elClose.className = '<%= Constant::get(:css_prefix) %>popup_close_button';
+    elClose.title = '<%= Constant::get(:close_text) %>';
+    goroam.controls.__popup_div.appendChild(elClose);
+    goroam.controls.__popup_close_button = elClose;
+    goroam.event.bindDom(goroam.controls.__popup_close_button, 'click', goroam.controls.__popup_close_button, goroam.controls.close_popup);
+  }
+  var elBody = goroam.dhtml.get_body();
+  if (elBody && elBody.scrollHeight) {
+    // I had to do this here because I was having difficulty getting it to work from CSS.
+    // This works correctly in FF, IE, Chrome, and Safari. The width doesn't work correctly in Opera.
+		var iHeight = Math.max(elBody.scrollHeight, elBody.clientHeight);
+		var iWidth = Math.max(elBody.scrollWidth, elBody.clientWidth);
+	  goroam.controls.__popup_obscurer.style.height = iHeight + 'px';
+  	goroam.controls.__popup_obscurer.style.width = iWidth + 'px';
+    goroam.controls.__popup_div.style.top = ((window.pageYOffset || elBody.scrollTop || document.documentElement.scrollTop) + 10) + 'px';
+  }
+  goroam.controls.__popup_container.style.display = 'block';
+}
+
+
+
+/********************************
+ * FUNCTION:	popup
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.03.03
+ * DESCRIPTION:	This function creates a popup window within the current screen.
+ * PARAMETERS:	strText       The text to show in the popup.
+ *              strClassName  Optional.  A class name to apply to the popup, for styling.
+ * RETURNS:	    none
+ */
+goroam.controls.popup = function(strText, strClassName) {
+  goroam.controls.create_popup_wrapper();
+  goroam.controls.__popup_text.innerHTML = strText;
+  goroam.dhtml.edit_class_name(goroam.controls.__popup_div, 'msg_box' + (strClassName ? ' ' + strClassName : ''));
+}
+
+
+
+/********************************
+ * FUNCTION:	popup_map
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.03.04
+ * DESCRIPTION:	This function creates a popup window containing a map within the current screen.
+ * PARAMETERS:	objLatLng     The lat/lng point to show on the map.
+ *              iZoom         Optional.  The zoom level to use when showing the lat/lng.  Defaults to a constant.
+ * RETURNS:	    none
+ */
+goroam.controls.popup_map = function(objLatLng, iZoom) {
+  goroam.controls.create_popup_wrapper();
+  if (!goroam.controls.__popup_map) {
+    var elDiv = document.createElement('div');
+    elDiv.id = goroam.controls.__popup_map_id;
+    goroam.controls.__popup_map = elDiv;
+  }
+  goroam.dhtml.edit_class_name(goroam.controls.__popup_div, 'popup_map');
+  goroam.controls.__popup_text.appendChild(goroam.controls.__popup_map);
+  var objMap = goroam.google.maps.get_map(goroam.controls.__popup_map_id);
+  objMap.recenter_active_marker(objLatLng, (iZoom || parseInt('<%= Constant::get(:default_popup_map_zoom) %>')));
+  objMap.checkResize();
+}
+
+
+
+/********************************
+ * FUNCTION:	popup_window
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.02.19
+ * DESCRIPTION:	This function creates a popup window for a given URL.
+ * PARAMETERS:	strUrl        The URL to open in the popup.
+ *              iHeight       Optional.  The height of the window.  Defaults to 200px.
+ *              iWidth        Optional.  The width of the window.  Defaults to 300px.
+ *              strWindowName Optional.  The name of the window to open in.  Use this to open multiple different windows.
+ *              bolShowMenus  Optional.  True to show normal window menus (location, menu, back, etc.); False to hide those things.  Defaults to false.
+ *              bolResizable  Optional.  True to make the window resizable; False to make the window static.  Defaults to false.
+ * RETURNS:	    A handle for the window that is opened.
+ */
+goroam.controls.popup_window = function(strUrl, iHeight, iWidth, strWindowName, bolShowMenus, bolResizable) {
+  strWindowName = (strWindowName || '');
+  var iX = 0, iY = 0;
+  // Figure out the dimensions and location of the popup window.
+  if (window.screen) {
+    if (!iHeight) iHeight = .9 * window.screen.height;
+    if (!iWidth) iWidth = .9 * window.screen.width;
+    iY = (window.screen.height / 2) - (iHeight / 2);
+    iX = (window.screen.width / 2) - (iWidth / 2);
+  } else {
+    if (!iHeight) iHeight = 300;
+    if (!iWidth) iWidth = 200;
+  }
+  var strOptions = '';
+  if (bolShowMenus) {
+    strOptions += 'location=yes,directories=yes,menubar=yes';
+  } else {
+    strOptions += 'location=no,directories=no,menubar=no';
+  }
+  if (bolResizable) {
+    strOptions += ',resizable=yes,scrollbars=yes';
+  } else {
+    strOptions += ',resizable=no,scrollbars=no';
+  }
+  strOptions += ',status=yes,titlebar=yes,toolbar=no,height=' + iHeight + 'px,width=' + iWidth + 'px,screenX=' + iX + ',screenY=' + iY + ',left=' + iX + ',top=' + iY;
+  return window.open(strUrl, strWindowName, strOptions);
+}
+
