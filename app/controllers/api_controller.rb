@@ -58,15 +58,18 @@ class ApiController < ApplicationController
     if StringLib.empty?(@settings[:controls]): @settings[:controls] = :all
     else @settings[:controls] = @settings[:controls].to_sym end
     if StringLib.empty?(@settings[:position])
-      @settings[:position] = 'se'
+      @settings[:position] = 'out_nw'
     else
       @settings[:position].downcase!
       case @settings[:position]
-        when 'ne', 'se', 'sw', 'nw'
+        when 'ne', 'se', 'sw', 'nw', 'out_ne', 'out_se', 'out_sw', 'out_nw'
         else
-          @settings[:position] = 'se'
+          @settings[:position] = 'out_nw'
       end
     end
+    if StringLib.empty?(@settings[:line_color]): @settings[:line_color] = Constant::get(:default_line_color) end
+    if StringLib.empty?(@settings[:line_width]): @settings[:line_width] = Constant::get(:default_line_width) end
+    if StringLib.empty?(@settings[:line_opacity]): @settings[:line_opacity] = Constant::get(:default_line_opacity) end
   end
 
   def before_filter_load_settings

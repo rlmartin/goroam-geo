@@ -244,7 +244,7 @@ goroam.dhtml.get_inner_html = function(elElement) {
   var strResult = '';
   if (elElement) {
     var elNode = elElement.cloneNode(true);
-    var arrRemove = goroam.dhtml.get_elements_in_class('<%= Constant::get(:css_prefix) %>map_prompt', elNode);
+    var arrRemove = goroam.dhtml.get_elements_in_class('map_prompt', elNode);
     for (var i = 0; i < arrRemove.length; i++) arrRemove[i].parentNode.removeChild(arrRemove[i]);
     strResult = elNode.innerHTML;
   }

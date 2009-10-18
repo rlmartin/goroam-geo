@@ -14,7 +14,7 @@ class ItemsController < ApplicationController
           StringLib.trim!(params[:item][:value], '/')
           params[:item][:value] = params[:item][:value] + '/'
         end
-         @item = Item.find_by_value(params[:item][:value])
+         @item = Item.find_by_value_sanitized(params[:item][:value])
          if @item == nil
             @item = Item.create(params[:item])
          else
