@@ -59,6 +59,36 @@ goroam.dhtml.edit_class_name = function(elElement, strAdd, strRemove, bolNoPrefi
 
 
 
+/******************************** * FUNCTION:	hide, hide_me, show_me, toggle, toggle_me * WRITTEN BY:	Ryan Martin * WRITTEN ON:	2009.10.30
+ * DESCRIPTION:	This function shows or hides the element. * PARAMETERS:	None    Show/hide is done on the calling object. * RETURNS:	none */
+goroam.dhtml.show = function(elElement) {
+	var strDisplay = (elElement.__display || '').toLowerCase();
+	if ((strDisplay == 'none') || (strDisplay == '')) strDisplay = 'inline';
+  elElement.style.display = strDisplay;
+}
+goroam.dhtml.show_me = function() {
+	goroam.dhtml.show(this);
+}
+goroam.dhtml.hide = function(elElement) {
+  elElement.__display = elElement.style.display;
+	elElement.style.display = 'none';
+}
+goroam.dhtml.hide_me = function() {
+	goroam.dhtml.hide(this);
+}
+goroam.dhtml.toggle = function(elElement) {
+	if (goroam.dhtml.get_current_style(elElement, 'display') == 'none') {
+		goroam.dhtml.show(elElement);
+	} else {
+		goroam.dhtml.hide(elElement);
+	}
+}
+goroam.dhtml.toggle_me = function() {
+	goroam.dhtml.toggle(this);
+}
+
+
+
 /********************************
  * FUNCTION:	highlight, unhighlight
  * WRITTEN BY:	Ryan Martin
@@ -90,6 +120,29 @@ goroam.dhtml.get_body = function() {
 	elResult = document.body;
 	if (!elResult) elResult = document.getElementsByTagName("body")[0];
 	return elResult;
+}
+
+
+
+/********************************
+ * FUNCTION:	get_current_style
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2007.11.03
+ * DESCRIPTION:	This function gets the current style of the element. This is different than simply using the 'style' property because 'style' *							does not take the CSS stylesheet into account; it is only what is set in the style property on the element.
+ * PARAMETERS:	elElement		The element to examine.
+ *							strStyle		The style property to look for.
+ * RETURNS:			string			The assigned value of the style attribute for the element.
+ */
+goroam.dhtml.get_current_style = function(elElement, strStyle) {
+	var strResult = '';
+	if (elElement.currentStyle) {
+		strResult = elElement.currentStyle[strStyle];
+	} else if (document.defaultView && document.defaultView.getComputedStyle) {
+		strResult = document.defaultView.getComputedStyle(elElement, null).getPropertyValue(strStyle);
+	} else {
+		strResult = elElement.style[strStyle];
+	}
+	return strResult.toLowerCase();
 }
 
 

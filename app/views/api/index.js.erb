@@ -1,4 +1,5 @@
 if (!window.goroam) {
 	document.write('<link rel="stylesheet" type="text/css" href="<%= Constant::get(:root_url) %>/stylesheets/default.css" />');
+	if ('<%= params[:gmaps_key] %>' != '') document.write('<scr' + 'ipt language="javascript" type="text/javascript" src="http://www.google.com/jsapi?key=<%= params[:gmaps_key] %>"></scr' + 'ipt>');
 	document.write('<scr' + 'ipt language="javascript" type="text/javascript" src="<%= @api_url %>?href=' + location.href + '&host=' + location.host + '"></scr' + 'ipt>');
 }

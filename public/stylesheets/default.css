@@ -18,7 +18,12 @@ img.gr_highlight, ul.gr_item_list li img.gr_highlight { border: 1px solid #f60; 
 .gr_map_prompt_se { bottom: 0px; right: 0px; }
 .gr_map_prompt_sw { bottom: 0px; left: 0px; }
 .gr_map_prompt_hover_element { background-image: url(http://geo.goro.am/images/icons/map_go.gif); filter: alpha(opacity = 100); font-size: 0px; height: 16px; line-height: 0px; opacity: 1; width: 16px; }
-.gr_map_route, .map_route { display: none; }
+.gr_map_route, .map_route, .gr_map_route_driving, .map_route_driving, .gr_map_route_walking, .map_route_walking { display: none; }
+.gr_point_menu { background-color: #fff; border: 1px solid #f60; display: none; list-style: none; list-style-position: outside; padding: 0px; margin: 0px; width: 8em; }
+.gr_point_menu .gr_odd_row { background-color: #ddd; }
+.gr_point_menu .gr_point_menu_item { font-size: 0.7em; line-height: 1.1em; }
+.gr_point_menu .gr_point_menu_item a { color: #f60; text-decoration: none; }
+.gr_point_menu .gr_point_menu_item a:hover { text-decoration: underline; }
 .gr_popup_background { background-color: #000; filter:alpha(opacity=50); height: 100%; left: 0px; position: absolute; opacity: 0.7; top: 0px; width: 100%; z-index: 3000; }
 .gr_popup_div { margin: 0 auto; overflow: auto; z-index: 3001; }
 .gr_popup_close_button { background-image: url(http://geo.goro.am/images/close_button_small.gif); border-bottom: 1px solid #254; border-left: 1px solid #254; cursor: pointer; font-size: 0px; height: 7px; line-height: 0px; position: absolute; right: 0px; top: 0px; width: 7px; z-index: 3002; }

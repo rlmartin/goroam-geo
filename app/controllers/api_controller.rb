@@ -70,6 +70,16 @@ class ApiController < ApplicationController
     if StringLib.empty?(@settings[:line_color]): @settings[:line_color] = Constant::get(:default_line_color) end
     if StringLib.empty?(@settings[:line_width]): @settings[:line_width] = Constant::get(:default_line_width) end
     if StringLib.empty?(@settings[:line_opacity]): @settings[:line_opacity] = Constant::get(:default_line_opacity) end
+    if StringLib.empty?(@settings[:line_on_roads])
+      @settings[:line_on_roads] = Constant::get(:default_follow_roads_setting)
+    else
+      @settings[:line_on_roads].downcase!
+      case @settings[:line_on_roads]
+        when 'no', 'yes', 'driving', 'walking'
+        else
+          @settings[:line_on_roads] = Constant::get(:default_follow_roads_setting)
+      end
+    end
   end
 
   def before_filter_load_settings

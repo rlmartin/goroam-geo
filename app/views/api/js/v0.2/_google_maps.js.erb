@@ -1,11 +1,16 @@
-goroam.google.maps.version = '2.142';
-if ((goroam.browser.host_info().name == goroam.enm.browsers.safari) && (goroam.browser.host_info().major_ver < 525)) goroam.google.maps.version = '2.88';
+goroam.google.maps.version = '2.176';
+if ((goroam.browser.host_info().name == goroam.enm.browsers.safari) && (goroam.browser.host_info().major_ver < 525)) goroam.google.maps.version = '';
 
-google.load('maps', goroam.google.maps.version);
+if (goroam.google.maps.version != '') {
+	google.load('maps', goroam.google.maps.version);
+} else {
+	alert('<%= Constant::get(:error_header) %><%= Constant::get(:error_browser_not_supported) %>');
+}
 
 // Load local variables for functions.
 goroam.google.maps.__active_map = undefined;
 goroam.google.maps.__active_map_id = '<%= @settings[:map] %>';
+goroam.google.maps.__count_of_page_lat_lng = 0;
 goroam.google.maps.__count_of_processing_addr = 0;
 goroam.google.maps.__page_maps = {};
 goroam.google.maps.__addr_attr = '<%= Constant::get(:addr_attribute) %>';
@@ -39,11 +44,11 @@ goroam.google.maps.extend_functionality = function() {
   // Map2 object extensions
   // New "local" variables
   google.maps.Map2.prototype.active_marker = undefined;
-  google.maps.Map2.prototype.__bounds = new google.maps.LatLngBounds();
-  google.maps.Map2.prototype.__lines = [];
+  google.maps.Map2.prototype.__bounds = undefined;
+  google.maps.Map2.prototype.__lines = undefined;
 
   // New methods
-  google.maps.Map2.prototype.add_lat_lng = function(dLat, dLng) {
+  google.maps.Map2.prototype.add_lat_lng = function(dLat, dLng, strAnchor, strAnchorText) {
     var strKey = dLat + '_' + dLng;
     if (!this.__lat_lng) this.__lat_lng = {};
     if (this.__lat_lng[strKey]) {
@@ -53,8 +58,29 @@ goroam.google.maps.extend_functionality = function() {
       var objMarker = goroam.google.maps.create_marker(objLatLng);
       this.__lat_lng[strKey] = objMarker;
       this.addOverlay(this.__lat_lng[strKey]);
-      this.__bounds.extend(objLatLng);
+      this.get_bounds().extend(objLatLng);
     }
+		// Add menu items if the anchor is given.
+		strAnchor = (strAnchor || '').trim();
+		strAnchorText = (strAnchorText || '').trim();
+		if ((strAnchor != '') && (strAnchorText != '')) {
+			var objMarker = this.__lat_lng[strKey];
+			if (!objMarker.__menu) {
+				objMarker.__menu = new goroam.google.maps.html_overlay({ class_name: '<%= Constant::get(:css_prefix) %>point_menu', container: document.createElement('ul'), lat_lng: objLatLng, position: 'se'});
+				this.addOverlay(objMarker.__menu);
+				goroam.event.bind(objMarker, 'click', objMarker, objMarker.trigger_hide_menus);
+				goroam.event.bind(objMarker, 'click', objMarker.__menu.get_container(), goroam.dhtml.toggle_me);
+				goroam.event.bind(this.getContainer(), 'hide_menus', objMarker, objMarker.hide_menu);
+			}
+			var elItem = document.createElement('li');
+			var elAnchor = document.createElement('a');
+			elAnchor.href = '#' + strAnchor;
+			elAnchor.innerHTML = strAnchorText;
+			goroam.dhtml.edit_class_name(elItem, 'point_menu_item');
+			elItem.appendChild(elAnchor);
+			objMarker.__menu.get_container().appendChild(elItem);
+			if ((objMarker.__menu.get_container().childNodes.length % 2) == 0) goroam.dhtml.edit_class_name(elItem, 'odd_row');
+		}
     // Return the object that was created.
     return this.__lat_lng[strKey];
   }
@@ -70,9 +96,14 @@ goroam.google.maps.extend_functionality = function() {
     objOverlay.map = undefined;
   }
 
+	// This function adds a directions line to the map.  If the line is not ready, it will try again.
+	google.maps.Map2.prototype.add_directions_line = function(objDirections, strColor, iWidth, dOpacity, iTravelMode) {
+		goroam.google.maps.add_directions_line_to_map(this, objDirections, strColor, iWidth, dOpacity, iTravelMode);
+	}
+
 	// This function adds a point to the line on the map.  If the line does not already exist, it will be created.
-	google.maps.Map2.prototype.add_point_to_line = function(strLineId, objLatLng, iIndex, strColor, iWidth, dOpacity) {
-		goroam.google.maps.add_point_to_line(this, strLineId, objLatLng, iIndex, strColor, iWidth, dOpacity);
+	google.maps.Map2.prototype.add_point_to_line = function(strLineId, objLatLng, iIndex, strRouteType, strColor, iWidth, dOpacity) {
+		goroam.google.maps.add_point_to_line(this, strLineId, objLatLng, iIndex, strRouteType, strColor, iWidth, dOpacity);
 	}
 
   // This function creates a marker in the given lat/lng, or at the center of the map if one is not given.
@@ -83,6 +114,24 @@ goroam.google.maps.extend_functionality = function() {
     this.addOverlay(this.active_marker);
     goroam.event.addListener(this.active_marker, 'dragend', function(objLatLng) { goroam.event.trigger(this.map, 'location_found', objLatLng); });
   }
+
+	// This function extends the map bounds to include the given LatLng.
+	google.maps.Map2.prototype.extend_bounds = function(objLatLng) {
+		this.get_bounds().extend(objLatLng);
+		this.resize_to_bounds();
+	}
+
+	// This function gets the map's internal bounds object.
+	google.maps.Map2.prototype.get_bounds = function() {
+		if (!this.__bounds) this.__bounds = new google.maps.LatLngBounds();
+		return this.__bounds;
+	}
+
+	// This function gets the array of lines already on the map.
+	google.maps.Map2.prototype.get_line_array = function() {
+		if (!this.__lines) this.__lines = [];
+		return this.__lines;
+	}
 
   // This function searched for the given location and recenters the map on that location if found.
   google.maps.Map2.prototype.goto_location = function(strLocation) {
@@ -124,7 +173,7 @@ goroam.google.maps.extend_functionality = function() {
   google.maps.Map2.prototype.resize_to_bounds = function(objLatLngBounds) {
     var bolResult = false;
     // Default to resizing to the map's bounds.
-    objLatLngBounds = (objLatLngBounds || this.__bounds);
+    objLatLngBounds = (objLatLngBounds || this.get_bounds());
     if (objLatLngBounds && !objLatLngBounds.isEmpty()) {
       var iZoom = this.getBoundsZoomLevel(objLatLngBounds);
       this.setCenter(objLatLngBounds.getCenter(), iZoom);
@@ -159,6 +208,20 @@ goroam.google.maps.extend_functionality = function() {
   google.maps.Map2.prototype.hide_layer = function(strId) {
     if (!this.__layers) this.__layers = {};
     if (this.__layers[strId]) this.__layers[strId].hide();
+  }
+
+
+
+  // This function triggers the 'hide_menus' event for the map.
+  google.maps.Marker.prototype.trigger_hide_menus = function() {
+		if (this.map) goroam.event.trigger(this.map.getContainer(), 'hide_menus', this);
+  }
+
+
+
+  // This function hides a menu for the current marker.
+  google.maps.Marker.prototype.hide_menu = function(objTarget) {
+		if (this.__menu && (this != objTarget)) goroam.dhtml.hide(this.__menu.get_container());
   }
 
 
@@ -254,6 +317,38 @@ goroam.google.maps.extend_functionality = function() {
 
 
 /********************************
+ * FUNCTION:	add_directions_line_to_map
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.10.18
+ * DESCRIPTION:	This function adds a directions line to the map if it is ready.  If the directions are updated, the line will also be updated,
+ *							so there is no need to re-add the line after the first time.
+ * PARAMETERS:	objMap				The Map to add the line to.
+ *							objDirections	The GDirections object to check for the Polyline.
+ * RETURNS:			none
+ */
+goroam.google.maps.add_directions_line_to_map = function(objMap, objDirections, strColor, iWidth, dOpacity, iTravelMode) {
+	var objStatus = objDirections.getStatus();
+	if (objStatus && objStatus.code == 200) {
+		var objLine = objDirections.getPolyline();
+		var objOptions = {};
+		objMap.addOverlay(objLine);
+		if (strColor) objOptions.color = strColor;
+		if (iWidth) objOptions.weight = iWidth;
+		if (dOpacity) objOptions.opacity = dOpacity;
+		objLine.setStrokeStyle(objOptions);
+		//objMap.
+	} else if (!objStatus || (objStatus.code == 500)) {
+		window.setTimeout(function() { goroam.google.maps.add_directions_line_to_map(objMap, objDirections, strColor, iWidth, dOpacity); }, 100);
+	} else if (objStatus && (objStatus.code == 620)) {
+		// If the error is due to too many requests, attempt loading it again.
+		objDirections.loadFromWaypoints(objDirections._waypoints, { getPolyline: true, preserveViewport: true, travelMode: (iTravelMode || G_TRAVEL_MODE_DRIVING) });
+		window.setTimeout(function() { goroam.google.maps.add_directions_line_to_map(objMap, objDirections, strColor, iWidth, dOpacity); }, 100);
+	}
+}
+
+
+
+/********************************
  * FUNCTION:	add_point_to_line
  * WRITTEN BY:	Ryan Martin
  * WRITTEN ON:	2009.10.13
@@ -262,21 +357,87 @@ goroam.google.maps.extend_functionality = function() {
  *							strLineId		The ID of the line to add the point to.
  *							objLatLng   The lat/lng point to add to the line.
  *							iIndex			Optional. The place in the line at which to add the point.  Defaults to the end.
+ *							strRouteType Optional. The type of 'directions' route to use: walking or driving. If not given or blank, use direct route.
  *							strColor		Optional. The RGB color to use when adding the first point to a new line. Defaults to the color in the settings.
  *							iWidth			Optional. The width to use when adding the first point to a new line. Defaults to the width in the settings.
  *							dOpacity		Optional. The opacity to use when adding the first point to a new line. Defaults to the opacity in the settings.
  * RETURNS:	The newly created goroam.google.maps.html_overlay
  */
-goroam.google.maps.add_point_to_line = function(objMap, strLineId, objLatLng, iIndex, strColor, iWidth, dOpacity) {
-	var objLine = objMap.__lines[strLineId];
-	if (objLatLng.getLatLng) objLatLng = objLatLng.getLatLng();
-	if (!objLine) {
-		objLine = new google.maps.Polyline([], (strColor || '<%= @settings[:line_color] %>'), (iWidth || <%= @settings[:line_width] %>), (dOpacity || <%= @settings[:line_opacity] %>));
-		objMap.addOverlay(objLine);
-		objMap.__lines[strLineId] = objLine;
+goroam.google.maps.add_point_to_line = function(objMap, strLineId, objLatLng, iIndex, strRouteType, strColor, iWidth, dOpacity) {
+	var objLine;
+	// Load line settings
+	strRouteType = ((strRouteType || '') == '' ? '<%= @settings[:line_on_roads] %>' : strRouteType);
+	var bolFollowRoads = false;
+	switch (strRouteType) {
+		case 'walking':
+		case 'driving':
+		case 'yes':
+			bolFollowRoads = true;
 	}
-	iIndex = (iIndex || objLine.getVertexCount());
-	objLine.insertVertex(iIndex, objLatLng);
+	strColor = (strColor || '<%= @settings[:line_color] %>');
+	dOpacity = (dOpacity || <%= @settings[:line_opacity] %>);
+	iWidth = (iWidth || <%= @settings[:line_width] %>);
+	// If the point passed in is a marker instead of a geo point
+	if (objLatLng.getLatLng) objLatLng = objLatLng.getLatLng();
+	// Different processing is required for lines that follow roads vs those that don't.
+	if (bolFollowRoads) {
+		var bolNewDirections = false;
+		// For 'directions' lines, the stored line is an array of line segments.
+		objLine = objMap.get_line_array()[strLineId];
+		var iSegmentIndex = 0;
+		if (objLine) {
+			// The segment index is linked to the given index, or is the index of the latest segment if the index is not given.
+			iSegmentIndex = (iIndex ? Math.floor(iIndex / <%= Constant::get(:follow_roads_max_per_line) %>) : objLine.length - 1);
+			// If the segment has hit the maximum, increase the segment index by 1.
+			if (objLine[iSegmentIndex] && objLine[iSegmentIndex]._waypoints && objLine[iSegmentIndex]._waypoints.length == <%= Constant::get(:follow_roads_max_per_line) %>) iSegmentIndex++;
+		} else {
+			objLine = [];
+			objMap.get_line_array()[strLineId] = objLine;
+		}
+		if (!objLine[iSegmentIndex]) {
+			// Walking directions requires a DIV for the directions.
+			objLine[iSegmentIndex] = new google.maps.Directions(undefined, (strRouteType == 'walking' ? goroam.google.maps.get_hidden_directions_container(iSegmentIndex) : undefined));
+			bolNewDirections = true;
+		}
+		// Switch to dealing only with the individual segment
+		objLine = objLine[iSegmentIndex];
+		if (!objLine._waypoints) objLine._waypoints = [];
+		// Calculate the index within the given segment.
+		iIndex = (iIndex ? iIndex - (iSegmentIndex * <%= Constant::get(:follow_roads_max_per_line) %>) + iSegmentIndex : objLine._waypoints.length);
+		if (iIndex < 0) iIndex = 0;
+		// Subsequent segments should include the final point of the previous segment to correctly connect the lines.
+		if (iSegmentIndex > 0) {
+			if (iIndex == 0) {
+				var objWaypoints = objMap.get_line_array()[strLineId][iSegmentIndex - 1]._waypoints;
+				objLine._waypoints[0] = objWaypoints[objWaypoints.length - 1];
+				iIndex++;
+			}
+		}
+		objLine._waypoints[iIndex] = objLatLng.toString();
+		objLine.clear();
+		var iTravelMode = G_TRAVEL_MODE_DRIVING;
+		if (strRouteType == 'walking') iTravelMode = G_TRAVEL_MODE_WALKING;
+		objLine._updated = true;
+		// Google maps only allows a certain number of directions requests within a period of time, so delay the request until the line is more
+		// fully loaded.
+		window.setTimeout(function() {
+			if (objLine._updated) {
+				objLine.loadFromWaypoints(objLine._waypoints, { getPolyline: true, preserveViewport: true, travelMode: iTravelMode });
+				objLine._updated = false;
+			}
+		}, <%= Constant::get(:follow_roads_calc_delay) %>);
+		if (bolNewDirections) objMap.add_directions_line(objLine, strColor, iWidth, dOpacity, iTravelMode);
+	} else {
+		objLine = objMap.get_line_array()[strLineId];
+		if (!objLine) {
+			objLine = new google.maps.Polyline([], strColor, iWidth, dOpacity);
+			objMap.addOverlay(objLine);
+			objMap.get_line_array()[strLineId] = objLine;
+		}
+		iIndex = (iIndex || objLine.getVertexCount());
+		objLine.insertVertex(iIndex, objLatLng);
+	}
+	objMap.extend_bounds(objLatLng);
 }
 
 
@@ -509,6 +670,28 @@ goroam.google.maps.get_address = function(objLatLng, fCallAfter) {
 
 
 /********************************
+ * FUNCTION:	get_hidden_directions_container
+ * WRITTEN BY:	Ryan Martin
+ * WRITTEN ON:	2009.10.22
+ * DESCRIPTION:	This function gets/creates the container on the page that holds the hidden iframes used in the
+ *              cross-domain communication.
+ * PARAMETERS:	None
+ * RETURNS:	None
+ */
+goroam.google.maps.get_hidden_directions_container = function(iIndex) {
+	iIndex = (iIndex || 0);
+	if (!goroam.google.maps.__hidden_directions_container) goroam.google.maps.__hidden_directions_container = [];
+  if (!goroam.google.maps.__hidden_directions_container[iIndex]) {
+    goroam.google.maps.__hidden_directions_container[iIndex] = document.createElement('div');
+    //goroam.google.maps.__hidden_directions_container[iIndex].style.display = 'none';
+    document.getElementsByTagName('body')[0].appendChild(goroam.google.maps.__hidden_directions_container[iIndex]);
+  }
+  return goroam.google.maps.__hidden_directions_container[iIndex];
+}
+
+
+
+/********************************
  * FUNCTION:	get_map
  * WRITTEN BY:	Ryan Martin
  * WRITTEN ON:	2009.01.27
@@ -675,6 +858,12 @@ goroam.google.maps.add_map_prompt = function(elElement) {
     goroam.event.bindDom(elElement, 'mouseout', elElement, goroam.dhtml.unset_mouseover);
     goroam.event.bindDom(elElement, 'mouseout', elElement, goroam.google.maps.leave_map_element);
     goroam.event.bindDom(elElement, 'click', elElement, function(e) { if (this.__map_prompt && this.__map_prompt.__mouseover) goroam.dhtml.cancel_bubble(e); });
+		// Create an anchor to be able to reference this location later.
+    var elAnchor = document.createElement('a');
+		elAnchor.style.position = 'absolute';
+		elAnchor.name = '_latlng' + goroam.google.maps.__count_of_page_lat_lng++;
+		elAnchor.id = elAnchor.name;
+		if (goroam.browser.host_info().name == goroam.enm.browsers.ie) elAnchor.innerHTML = '&nbsp;';
     // Create a link to trigger the onclick event and move to the map's anchor on the page.
     var elLink = document.createElement('a');
     elLink.href = '#' + goroam.system.set_default(elElement.getAttribute(goroam.google.maps.__map_attr), '<%= @settings[:map] %>');
@@ -683,6 +872,7 @@ goroam.google.maps.add_map_prompt = function(elElement) {
     elLink.innerHTML = '<img src="<%= Constant::get(:root_url) %>/images/px.gif" style="border-width:0px; height:100%; width:100%;" title="<%= Constant::get(:show_on_map_prompt_text) %>" />';
     // Create the container that holds the link and is the vessel for display styles.
     elElement.__map_prompt = document.createElement('div');
+		elElement.__map_prompt.__anchor = elAnchor.name;
     elElement.__map_prompt.className = '<%= Constant::get(:css_prefix) %>map_prompt <%= Constant::get(:css_prefix) %>map_prompt_' + strPosition;
     elElement.__map_prompt.appendChild(elLink);
     // When hovering over the map prompt, use this class name instead of the default.
@@ -717,14 +907,19 @@ goroam.google.maps.add_map_prompt = function(elElement) {
       elElement.parentNode.replaceChild(elSpan, elElement);
       elSpan.appendChild(elElement);
       elSpan.appendChild(elElement.__map_prompt);
+			// Insert an anchor to be able to navigate to this location.
+			elSpan.insertBefore(elAnchor, elElement);
     } else {
       // IE Hack to give the parent element "layout".
       if ((goroam.browser.host_info().name == goroam.enm.browsers.ie) && elElement.currentStyle && !elElement.currentStyle.hasLayout) elElement.style.zoom = 1;
       elElement.appendChild(elElement.__map_prompt);
 			// Tag the element with a class name so it can be accessed through CSS.
 			goroam.dhtml.edit_class_name(elElement, 'tagged_element' + strOutside);
+			// Insert an anchor to be able to navigate to this location.
+			elElement.parentNode.insertBefore(elAnchor, elElement);
     }
   }
+	return elElement.__map_prompt.__anchor;
 }
 goroam.google.maps.over_map_element = function() {
   if (!this.__map_prompt.__mouseover) goroam.dhtml.edit_class_name(this.__map_prompt, 'map_prompt_hover_element');
@@ -751,7 +946,6 @@ goroam.google.maps.process_all_geolists = function() {
 		var arrLists = document.getElementsByTagName(arrTagNames[j]);
 		for (var i = 0; i < arrLists.length; i++) {
 			goroam.google.maps.process_geolist(arrLists[i]);
-			goroam.dhtml.edit_class_name(arrLists[i], 'geo_list');
 		}
 	}
 }
@@ -771,17 +965,15 @@ goroam.google.maps.process_geolist = function(elList) {
 	if ((elList.tagName.toLowerCase() == 'ul') || (elList.tagName.toLowerCase() == 'ol')) {
 		// If the list has no text, assume it is only there to define a map route.
 		if (goroam.dhtml.get_inner_text(elList).compress_whitespace().trim() == '') goroam.dhtml.edit_class_name(elList, 'map_route');
+		var strRouteType = (elList.className.match(/\b(gr_)?map_route_(walking|driving)\b/i) || [''])[0].right_of('map_route_').toLowerCase();
 		// Pull all geotagged children.
 		var arrTagged = goroam.dhtml.get_elements_with_attribute(goroam.google.maps.__lat_attr + ' , ' + goroam.google.maps.__addr_attr, elList);
 		if (arrTagged.length > 0) {
+			goroam.dhtml.edit_class_name(elList, 'geo_list');
 			var strId = (elList.id || '');
-			var strColor, iWidth, dOpacity;
-			// If the list is tagged as a map_route, use the line settings from the HTML element.
-			if (goroam.dhtml.is_in_class(elList, '<%= Constant::get(:css_prefix) %>map_route map_route', true)) {
-				strColor = elList.style.color;
-				iWidth = parseInt(elList.style.width);
-				dOpacity = elList.style.opacity;
-			}
+			var strColor = elList.style.color;
+			var iWidth = parseInt(elList.style.width);
+			var dOpacity = elList.style.opacity;
 			if (strId == '') elList.id = goroam.math.random_string(30);
 			for (var i = 0; i < arrTagged.length; i++) {
 				var objMap = goroam.google.maps.get_map(arrTagged[i].getAttribute(goroam.google.maps.__map_attr));
@@ -799,12 +991,12 @@ goroam.google.maps.process_geolist = function(elList) {
 							if (objPoint) {
 								this.setAttribute(goroam.google.maps.__lat_attr, objPoint.lat());
 								this.setAttribute(goroam.google.maps.__lng_attr, objPoint.lng());
-								objMap.add_point_to_line(strId, objPoint, iIndex, strColor, iWidth, dOpacity);
+								objMap.add_point_to_line(strId, objPoint, iIndex, strRouteType, strColor, iWidth, dOpacity);
 							}
 						}, true);
 					} else {
 						// If both lat and lng are given, use those values every time, whether not not addr is defined.
-						objMap.add_point_to_line(strId, new google.maps.LatLng(arrTagged[i].getAttribute(goroam.google.maps.__lat_attr), arrTagged[i].getAttribute(goroam.google.maps.__lng_attr)), arrCounts[strMapId], strColor, iWidth, dOpacity);
+						objMap.add_point_to_line(strId, new google.maps.LatLng(arrTagged[i].getAttribute(goroam.google.maps.__lat_attr), arrTagged[i].getAttribute(goroam.google.maps.__lng_attr)), arrCounts[strMapId], strRouteType, strColor, iWidth, dOpacity);
 					}
 					if (arrTagged[i].tagName.toLowerCase() == 'li') goroam.dhtml.edit_class_name(arrTagged[i], 'geo_tag_only');
 				}
@@ -824,17 +1016,34 @@ goroam.google.maps.process_geolist = function(elList) {
  * RETURNS:		  none
  */
 goroam.google.maps.process_geotagged_element = function(elElement) {
-  var objMap = goroam.google.maps.get_map(elElement.getAttribute(goroam.google.maps.__map_attr));
-  if (objMap) {
-    var objLatLng = objMap.add_lat_lng(elElement.getAttribute(goroam.google.maps.__lat_attr), elElement.getAttribute(goroam.google.maps.__lng_attr));
-    // Add event triggers to highlight the element when hovering over the map marker.
-    goroam.event.bind(objLatLng, 'mouseover', elElement, goroam.dhtml.highlight);
-    goroam.event.bind(objLatLng, 'mouseout', elElement, goroam.dhtml.unhighlight);
-    // Resize and recenter the maps based on the loaded lat/lng points.
-    objMap.resize_to_bounds();
-  }
-  // Add a map prompt to the element.
-  if ((elElement.tagName.toLowerCase() == 'img') || (goroam.dhtml.get_inner_text(elElement) != '')) goroam.google.maps.add_map_prompt(elElement);
+	var bolShowOnMap = true;
+	// For geopoints that indicate a line, don't add a marker on the map.
+	if (elElement.tagName.toLowerCase() == 'li') {
+		var objData = goroam.dhtml.get_inner_text(elElement);
+		if ((objData.title == '' || objData.title == null) && (objData.value == '' || objData.value == null)) bolShowOnMap = false;
+	}
+	if (bolShowOnMap) {
+		// Add a map prompt to the element.
+		var strAnchor = '';
+		if ((elElement.tagName.toLowerCase() == 'img') || (goroam.dhtml.get_inner_text(elElement) != '')) strAnchor = goroam.google.maps.add_map_prompt(elElement);
+		var objMap = goroam.google.maps.get_map(elElement.getAttribute(goroam.google.maps.__map_attr));
+		if (objMap) {
+			var objData = goroam.dhtml.get_element_data(elElement);
+			var strAnchorText = (objData.title || '');
+			if (strAnchorText == '') strAnchorText = (objData.value || '');
+			if (strAnchorText.length > 25) strAnchorText = strAnchorText.left(25) + '...';
+		  var objLatLng = objMap.add_lat_lng(elElement.getAttribute(goroam.google.maps.__lat_attr), elElement.getAttribute(goroam.google.maps.__lng_attr), strAnchor, strAnchorText);
+		  // Add event triggers to highlight the element when hovering over the map marker.
+		  goroam.event.bind(objLatLng, 'mouseover', elElement, goroam.dhtml.highlight);
+		  goroam.event.bind(objLatLng, 'mouseout', elElement, goroam.dhtml.unhighlight);
+			if (objLatLng.__menu) {
+				goroam.event.bindDom(objLatLng.__menu.get_container().lastChild, 'mouseover', elElement, goroam.dhtml.highlight);
+				goroam.event.bindDom(objLatLng.__menu.get_container().lastChild, 'mouseout', elElement, goroam.dhtml.unhighlight);
+			}
+		  // Resize and recenter the maps based on the loaded lat/lng points.
+		  objMap.resize_to_bounds();
+		}
+	}
   // Send the element data back to the GoRoam server.
   goroam.xdcomm.send_element(elElement);
 }
