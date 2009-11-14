@@ -1,4 +1,15 @@
 --- 
+constants_073: 
+  server_type: ""
+  name: default_line_opacity
+  created_at: 2009-10-16 11:00:40
+  updated_at: 2009-10-16 11:00:40
+  array: "0"
+  id: "76"
+  value: .75
+  cast_as: float
+  lang: ""
+  active: "1"
 constants_010: 
   server_type: ""
   name: data_type_unknown
@@ -54,6 +65,17 @@ constants_052:
   cast_as: ""
   lang: ""
   active: "1"
+constants_074: 
+  server_type: ""
+  name: default_follow_roads_setting
+  created_at: 2009-10-18 17:32:41
+  updated_at: 2009-10-18 17:32:41
+  array: "0"
+  id: "77"
+  value: "no"
+  cast_as: ""
+  lang: ""
+  active: "1"
 constants_009: 
   server_type: ""
   name: current_version
@@ -61,7 +83,7 @@ constants_009:
   updated_at: 2009-01-25 14:47:08
   array: "0"
   id: "9"
-  value: "0.1"
+  value: "0.2"
   cast_as: ""
   lang: ""
   active: "1"
@@ -87,6 +109,17 @@ constants_053:
   cast_as: ""
   lang: ""
   active: "1"
+constants_075: 
+  server_type: ""
+  name: follow_roads_max_per_line
+  created_at: 2009-10-26 12:53:46
+  updated_at: 2009-10-28 12:02:31
+  array: "0"
+  id: "78"
+  value: "25"
+  cast_as: int
+  lang: ""
+  active: "1"
 constants_011: 
   server_type: ""
   name: default_item_display_limit
@@ -107,6 +140,17 @@ constants_054:
   id: "57"
   value: Find the latitude and longitude of your item using the map below.  You can either use the search box to find a named location, or you can simply drag the pushpin to the location you want.  Find the results in the boxes on the right and cut-and-paste the code into your web page.
   cast_as: ""
+  lang: ""
+  active: "1"
+constants_076: 
+  server_type: ""
+  name: follow_roads_calc_delay
+  created_at: 2009-10-27 12:38:33
+  updated_at: 2009-10-27 12:38:33
+  array: "0"
+  id: "79"
+  value: "100"
+  cast_as: int
   lang: ""
   active: "1"
 constants_012: 
@@ -149,7 +193,7 @@ constants_034:
   updated_at: 2009-02-16 14:02:45
   array: "0"
   id: "37"
-  value: geo.goro.am, localhost:3000, 192.168.1.2:3000
+  value: geo.goro.am, localhost:30001, 192.168.1.2:3000
   cast_as: ""
   lang: ""
   active: "1"
@@ -358,7 +402,7 @@ constants_020:
   updated_at: 2009-01-26 13:52:49
   array: "0"
   id: "21"
-  value: Sorry, the location was not found.
+  value: "Sorry, the location was not found: "
   cast_as: ""
   lang: ""
   active: "1"
@@ -604,6 +648,17 @@ constants_046:
   cast_as: ""
   lang: ""
   active: "1"
+constants_070: 
+  server_type: ""
+  name: addr_attribute
+  created_at: 2009-10-12 12:19:44
+  updated_at: 2009-10-12 12:19:44
+  array: "0"
+  id: "73"
+  value: addr
+  cast_as: ""
+  lang: ""
+  active: "1"
 constants_068: 
   server_type: ""
   name: default_popup_map_zoom
@@ -622,7 +677,7 @@ constants_005:
   updated_at: 2009-01-23 13:36:44
   array: "0"
   id: "5"
-  value: Sorry, your browser is not supported
+  value: Sorry, your browser is not supported by the maps on this page
   cast_as: ""
   lang: ""
   active: "1"
@@ -645,6 +700,17 @@ constants_047:
   array: "0"
   id: "50"
   value: Sorry, we could not locate your request.
+  cast_as: ""
+  lang: ""
+  active: "1"
+constants_071: 
+  server_type: ""
+  name: default_line_color
+  created_at: 2009-10-16 10:59:07
+  updated_at: 2009-10-16 10:59:07
+  array: "0"
+  id: "74"
+  value: "#0000ff"
   cast_as: ""
   lang: ""
   active: "1"
@@ -701,6 +767,17 @@ constants_048:
   id: "51"
   value: "Items tagged in this location:"
   cast_as: ""
+  lang: ""
+  active: "1"
+constants_072: 
+  server_type: ""
+  name: default_line_width
+  created_at: 2009-10-16 10:59:44
+  updated_at: 2009-10-16 10:59:44
+  array: "0"
+  id: "75"
+  value: "5"
+  cast_as: int
   lang: ""
   active: "1"
 constants_028: 
