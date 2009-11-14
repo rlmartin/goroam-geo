@@ -375,8 +375,8 @@ goroam.google.maps.add_point_to_line = function(objMap, strLineId, objLatLng, iI
 			bolFollowRoads = true;
 	}
 	strColor = (strColor || '<%= @settings[:line_color] %>');
-	dOpacity = (dOpacity || <%= @settings[:line_opacity] %>);
-	iWidth = (iWidth || <%= @settings[:line_width] %>);
+	dOpacity = (dOpacity || parseFloat('<%= @settings[:line_opacity] %>'));
+	iWidth = (iWidth || parseInt('<%= @settings[:line_width] %>'));
 	// If the point passed in is a marker instead of a geo point
 	if (objLatLng.getLatLng) objLatLng = objLatLng.getLatLng();
 	// Different processing is required for lines that follow roads vs those that don't.
@@ -387,9 +387,9 @@ goroam.google.maps.add_point_to_line = function(objMap, strLineId, objLatLng, iI
 		var iSegmentIndex = 0;
 		if (objLine) {
 			// The segment index is linked to the given index, or is the index of the latest segment if the index is not given.
-			iSegmentIndex = (iIndex ? Math.floor(iIndex / <%= Constant::get(:follow_roads_max_per_line) %>) : objLine.length - 1);
+			iSegmentIndex = (iIndex ? Math.floor(iIndex / parseInt('<%= Constant::get(:follow_roads_max_per_line) %>')) : objLine.length - 1);
 			// If the segment has hit the maximum, increase the segment index by 1.
-			if (objLine[iSegmentIndex] && objLine[iSegmentIndex]._waypoints && objLine[iSegmentIndex]._waypoints.length == <%= Constant::get(:follow_roads_max_per_line) %>) iSegmentIndex++;
+			if (objLine[iSegmentIndex] && objLine[iSegmentIndex]._waypoints && objLine[iSegmentIndex]._waypoints.length == parseInt('<%= Constant::get(:follow_roads_max_per_line) %>')) iSegmentIndex++;
 		} else {
 			objLine = [];
 			objMap.get_line_array()[strLineId] = objLine;
@@ -403,7 +403,7 @@ goroam.google.maps.add_point_to_line = function(objMap, strLineId, objLatLng, iI
 		objLine = objLine[iSegmentIndex];
 		if (!objLine._waypoints) objLine._waypoints = [];
 		// Calculate the index within the given segment.
-		iIndex = (iIndex ? iIndex - (iSegmentIndex * <%= Constant::get(:follow_roads_max_per_line) %>) + iSegmentIndex : objLine._waypoints.length);
+		iIndex = (iIndex ? iIndex - (iSegmentIndex * parseInt('<%= Constant::get(:follow_roads_max_per_line) %>')) + iSegmentIndex : objLine._waypoints.length);
 		if (iIndex < 0) iIndex = 0;
 		// Subsequent segments should include the final point of the previous segment to correctly connect the lines.
 		if (iSegmentIndex > 0) {
@@ -425,7 +425,7 @@ goroam.google.maps.add_point_to_line = function(objMap, strLineId, objLatLng, iI
 				objLine.loadFromWaypoints(objLine._waypoints, { getPolyline: true, preserveViewport: true, travelMode: iTravelMode });
 				objLine._updated = false;
 			}
-		}, <%= Constant::get(:follow_roads_calc_delay) %>);
+		}, parseInt('<%= Constant::get(:follow_roads_calc_delay) %>'));
 		if (bolNewDirections) objMap.add_directions_line(objLine, strColor, iWidth, dOpacity, iTravelMode);
 	} else {
 		objLine = objMap.get_line_array()[strLineId];
